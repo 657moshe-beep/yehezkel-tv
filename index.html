@@ -221,15 +221,67 @@ function updateClock(){
     year: "numeric"
   });
 
-  const hebrewDate = new Intl.DateTimeFormat("he-IL-u-ca-hebrew", {
+  // תאריך עברי: "4 באדר 5786" (מהדפדפן)
+const rawHeb = new Intl.DateTimeFormat("he-IL-u-ca-hebrew", {
   day: "numeric",
   month: "long",
   year: "numeric"
-}).format(now);
+}).format(now).replace(",", "");
+
+// חילוץ מספר יום/חודש/שנה מתוך הטקסט
+const m = rawHeb.match(/(\d+)\s+(.+?)\s+(\d+)/);
+let hebrewDatePretty = rawHeb;
+
+if (m) {
+  const dayNum = parseInt(m[1], 10);
+  const monthName = m[2].trim();
+  const yearNum = parseInt(m[3], 10);
+
+  hebrewDatePretty = `${hebrewDay(dayNum)} ${monthName} ${hebrewYear(yearNum)}`;
+}
+
+// --- המרות לאותיות ---
+function hebrewDay(n) {
+  const map = {
+    1:"א׳",2:"ב׳",3:"ג׳",4:"ד׳",5:"ה׳",6:"ו׳",7:"ז׳",8:"ח׳",9:"ט׳",10:"י׳",
+    11:"י״א",12:"י״ב",13:"י״ג",14:"י״ד",15:"ט״ו",16:"ט״ז",17:"י״ז",18:"י״ח",19:"י״ט",20:"כ׳",
+    21:"כ״א",22:"כ״ב",23:"כ״ג",24:"כ״ד",25:"כ״ה",26:"כ״ו",27:"כ״ז",28:"כ״ח",29:"כ״ט",30:"ל׳"
+  };
+  return map[n] || `${n}`;
+}
+
+function hebrewYear(year) {
+  // שנה כמו 5786 -> ה׳תשפ״ו
+  // עובדים על 4 הספרות האחרונות
+  const y = year % 1000; // 786
+  const hundreds = Math.floor(y / 100) * 100; // 700
+  const tensOnes = y % 100; // 86
+
+  const hMap = {100:"ק",200:"ר",300:"ש",400:"ת",500:"תק",600:"תר",700:"תש",800:"תת",900:"תתק"};
+  const tMap = {10:"י",20:"כ",30:"ל",40:"מ",50:"נ",60:"ס",70:"ע",80:"פ",90:"צ"};
+  const oMap = {1:"א",2:"ב",3:"ג",4:"ד",5:"ה",6:"ו",7:"ז",8:"ח",9:"ט"};
+
+  let s = (hMap[hundreds] || "");
+
+  // 15/16 מיוחדים
+  if (tensOnes === 15) s += "טו";
+  else if (tensOnes === 16) s += "טז";
+  else {
+    const tens = Math.floor(tensOnes / 10) * 10;
+    const ones = tensOnes % 10;
+    s += (tMap[tens] || "") + (oMap[ones] || "");
+  }
+
+  // גרש/גרשיים
+  if (s.length === 1) s += "׳";
+  else s = s.slice(0, -1) + "״" + s.slice(-1);
+
+  return `ה׳${s}`;
+}
 
 const cleanHebrewDate = hebrewDate.replace(",", "");  
   document.getElementById("clock").innerHTML =
-  time + " | " + date + "<br>" + cleanHebrewDate;}
+  time + " | " + date + "<br>" + hebrewDatePretty;
 setInterval(updateClock,1000);
 updateClock();
 
