@@ -182,6 +182,11 @@ font-size:22px;
   white-space: nowrap;
 }
 
+main {
+  transform: scale(0.85);
+ transform-origin: top center;
+}
+  
 body {
   padding-bottom: 110px;
 }
@@ -472,7 +477,10 @@ fetch(
 .catch((err) => console.log("RSS error:", err));
 
 
-
+// רענון כל שעה
+setInterval(function() {
+  location.reload();
+}, 60 * 60 * 1000);
 </script>
 </body>
 </html>
