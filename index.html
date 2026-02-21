@@ -222,11 +222,13 @@ function updateClock(){
   });
 
   const hebrewDate = new Intl.DateTimeFormat("he-IL-u-ca-hebrew", {
-    day: "numeric",
-    month: "long",
-    year: "numeric"
-  }).format(now);
-
+  day: "numeric",
+  month: "long",
+  year: "numeric"
+}).format(now)
+  .replace(/\d+/g, num =>
+    new Intl.NumberFormat("he-IL-u-nu-hebr").format(num)
+  );
   document.getElementById("clock").innerHTML =
     time + " | " + date + "<br>" + hebrewDate;
 }
