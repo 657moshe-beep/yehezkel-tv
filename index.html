@@ -281,15 +281,19 @@ function hebrewYear(year) {
 
 async function loadShabbatInfo() {
 
-  const today = new Date();
-  const day = today.getDay(); // 5 = שישי, 6 = שבת
-
-  if (day !== 5 && day !== 6) return;
-
   const box = document.getElementById("shabbatBox");
-  box.style.display = "block";
 
-  // קואורדינטות כפר סבא
+const dayIL = new Intl.DateTimeFormat("en-US", {
+  timeZone: "Asia/Jerusalem",
+  weekday: "short"
+}).format(new Date()); // Fri / Sat
+
+if (dayIL !== "Fri" && dayIL !== "Sat") {
+  box.style.display = "none";
+  return;
+}
+
+box.style.display = "block";  // קואורדינטות כפר סבא
   const lat = 32.175;
   const lon = 34.906;
 
