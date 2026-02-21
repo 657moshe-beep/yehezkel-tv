@@ -232,7 +232,7 @@ const nowCode = data.current.weather_code;
 const isDay = data.current.is_day === 1;
 
 document.getElementById("weatherDesc").innerText =
-  "כעת · " + weatherText(nowCode);
+" כעת: " + textFor(nowCode);
 
 document.getElementById("nowIcon").innerText =
   iconFor(nowCode, isDay);  
