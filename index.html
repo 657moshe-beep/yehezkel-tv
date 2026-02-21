@@ -299,27 +299,27 @@ function textFor(code){
 
 // ===== Next days =====
 const nDays = Math.min(5, data.daily.time.length);
-
-const dailyHtml = Array.from({ length: nDays }, (_, i) => {
+let dailyHtml = "";
+for (let i = 0; i < nDays; i++) {
   const dt = new Date(data.daily.time[i]);
   const dayName = dayNames[dt.getDay()];
 
-  const mx = Math.round(data.daily.temperature_2m_max[i]);
-  const mn = Math.round(data.daily.temperature_2m_min[i]);
+  const max = Math.round(data.daily.temperature_2m_max[i]);
+  const min = Math.round(data.daily.temperature_2m_min[i]);
   const code = data.daily.weather_code[i];
 
-  return `
+  dailyHtml += `
     <div class="day">
       <div class="d">${dayName}</div>
-      <div class="icon">${iconFor(code)}</div>
-      <div class="deg">${mx}° / ${mn}°</div>
+      <div class="icon">${iconFor(code, true)}</div>
+      <div class="deg">${min}° / ${max}°</div>
     </div>
   `;
-}).join("");
-
-document.getElementById("daily").innerHTML = dailyHtml;
 }
 
+document.getElementById("daily").innerHTML = dailyHtml; 
+ }
+  
 loadWeather();
 setInterval(loadWeather, 30*60*1000);
 
