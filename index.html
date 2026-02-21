@@ -225,11 +225,11 @@ function updateClock(){
   day: "numeric",
   month: "long",
   year: "numeric"
-}).format(now)
-  
+}).format(now);
+
+const cleanHebrewDate = hebrewDate.replace(",", "");  
   document.getElementById("clock").innerHTML =
-    time + " | " + date + "<br>" + hebrewDate;
-}
+  time + " | " + date + "<br>" + cleanHebrewDate;}
 setInterval(updateClock,1000);
 updateClock();
 
