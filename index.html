@@ -207,9 +207,28 @@ font-size:22px;
 <script>
 // שעון
 function updateClock(){
-  const now=new Date();
-  document.getElementById("clock").innerText=
-    now.toLocaleTimeString("he-IL",{hour:"2-digit",minute:"2-digit"});
+  const now = new Date();
+
+  const time = now.toLocaleTimeString("he-IL", {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+
+  const date = now.toLocaleDateString("he-IL", {
+    weekday: "long",
+    day: "numeric",
+    month: "numeric",
+    year: "numeric"
+  });
+
+  const hebrewDate = new Intl.DateTimeFormat("he-IL-u-ca-hebrew", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  }).format(now);
+
+  document.getElementById("clock").innerHTML =
+    time + " | " + date + "<br>" + hebrewDate;
 }
 setInterval(updateClock,1000);
 updateClock();
