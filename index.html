@@ -118,23 +118,23 @@ main{
   flex-wrap:nowrap;
   overflow-x:auto;
   padding-bottom:6px;
+  justify-content:flex-end;
 
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
 }
-.daily::-webkit-scrollbar{ display:none; }
-}
 
+.daily::-webkit-scrollbar{ display:none; }
 .day{
-  min-width:140px;
+  min-width:95px;
   text-align:center;
-  background:rgba(255,255,255,.05);
+  background: rgba(255,255,255,.05);
   border:1px solid rgba(255,255,255,.1);
   border-radius:18px;
   padding:14px 12px;
   flex:0 0 auto;
+  backdrop-filter: blur(8px);
 }
-
 .day .d{
   font-weight:900;
   font-size:18px;
