@@ -144,9 +144,11 @@ font-size:22px;
 
 .weather-now{
   display:flex;
-  align-items:center;
+  align-items:flex-end;
+  justify-content:space-between;
   gap:14px;
   margin-top:6px;
+}
 }
 
 .now-icon{
@@ -171,17 +173,20 @@ font-size:22px;
     </div>
   </div>
 
-  <div class="card">
-    <h2>מזג אוויר – כפר סבא</h2>
-<div class="weather-temp" id="temp">—°</div>
+ <div class="card">
+  <h2>מזג אוויר – כפר סבא</h2>
 
-<div class="weather-now">
-  <div class="now-icon" id="nowIcon">☀️</div>
-  <div class="weather-desc" id="weatherDesc">טוען...</div>
-</div>
+  <div class="weather-now">
+    <div class="weather-temp" id="temp">--°</div>
 
-<div class="daily" id="daily"></div>
+    <div class="weather-now-meta">
+      <div class="weather-desc" id="weatherDesc">טוען...</div>
+      <div class="now-icon" id="nowIcon">⛅</div>
+    </div>
   </div>
+
+  <div class="daily" id="daily"></div>
+</div>
 </main>
 
 <div class="ticker">
