@@ -242,7 +242,7 @@ document.getElementById("nowIcon").innerText =
  // ===== Weather code -> icon + text =====
 const dayNames = ["א","ב","ג","ד","ה","ו","ש"];
 
-function iconFor(code){
+function iconFor(code, isDay){
   if (code === 0) return "☀️";
   if (code >= 1 && code <= 3) return "⛅️";
   if (code === 45 || code === 48) return "🌫️";
