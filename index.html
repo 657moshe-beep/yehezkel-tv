@@ -136,8 +136,23 @@ main{
 .day .deg{
   margin-top:8px;
   font-weight:900;
-  font-size:22px;
-}</style>
+font-size:22px;
+.day .icon{
+  font-size:34px;
+  margin:4px 0 6px;
+}
+
+.weather-now{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-top:6px;
+}
+
+.now-icon{
+  font-size:42px;
+  line-height:1;
+}}</style>
 </head>
 
 <body>
@@ -157,9 +172,14 @@ main{
   </div>
 
   <div class="card">
-    <h2>מזג אוויר - כפר סבא</h2>
-    <div class="weather-temp" id="temp">--°</div>
-  <div class="weather-desc" id="weatherDesc">טוען נתונים...</div>
+    <h2>מזג אוויר – כפר סבא</h2>
+<div class="weather-temp" id="temp">—°</div>
+
+<div class="weather-now">
+  <div class="now-icon" id="nowIcon">☀️</div>
+  <div class="weather-desc" id="weatherDesc">טוען...</div>
+</div>
+
 <div class="daily" id="daily"></div>
   </div>
 </main>
