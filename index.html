@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yehezkel</title>
+
+<style>
+:root{
+  --bg:#070A12;
+  --glass:rgba(255,255,255,.06);
+  --stroke:rgba(255,255,255,.1);
+  --text:#F3F6FF;
+  --muted:#B6C0E0;
+  --accent1:#7C3AED;
+  --accent2:#22D3EE;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(124,58,237,.25), transparent 40%),
+    radial-gradient(circle at 80% 10%, rgba(34,211,238,.25), transparent 40%),
+    var(--bg);
+  color:var(--text);
+  overflow:hidden;
+}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:30px 50px;
+  border-bottom:1px solid var(--stroke);
+}
+
+h1{
+  font-size:48px;
+  margin:0;
+  background:linear-gradient(90deg,var(--accent1),var(--accent2));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+
+.clock{
+  font-size:32px;
+  color:var(--muted);
+}
+
+main{
+  display:grid;
+  grid-template-columns:1.3fr .8fr;
+  gap:30px;
+  padding:40px;
+  height:calc(100vh - 130px);
+}
+
+.card{
+  background:var(--glass);
+  border:1px solid var(--stroke);
+  border-radius:20px;
+  padding:30px;
+  backdrop-filter:blur(20px);
+}
+
+.card h2{
+  margin-top:0;
+  color:var(--muted);
+  font-size:24px;
+}
+
+.msg{
+  font-size:36px;
+  font-weight:700;
+  line-height:1.4;
+}
+
+.weather-temp{
+  font-size:72px;
+  font-weight:800;
+}
+
+.weather-desc{
+  font-size:22px;
+  color:var(--muted);
+}
+
+.ticker{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:60px;
+  background:rgba(0,0,0,.8);
+  display:flex;
+  align-items:center;
+  padding:0 30px;
+  overflow:hidden;
+  font-size:22px;
+}
+
+.marquee{
+  white-space:nowrap;
+  animation:scroll 30s linear infinite;
+}
+
+@keyframes scroll{
+  from{transform:translateX(-10%)}
+  to{transform:translateX(100%)}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Yehezkel</h1>
+  <div class="clock" id="clock"></div>
+</header>
+
+<main>
+  <div class="card">
+    <h2>הודעות</h2>
+    <div class="msg" id="message">
+      ברוכים הבאים ללובי 🏢<br>
+      נא לשמור על ניקיון הבניין.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>מזג אוויר - כפר סבא</h2>
+    <div class="weather-temp" id="temp">--°</div>
+    <div class="weather-desc" id="weatherDesc">טוען נתונים...</div>
+  </div>
+</main>
+
+<div class="ticker">
+  <div class="marquee" id="news">טוען חדשות...</div>
+</div>
+
+<script>
+// שעון
+function updateClock(){
+  const now=new Date();
+  document.getElementById("clock").innerText=
+    now.toLocaleTimeString("he-IL",{hour:"2-digit",minute:"2-digit"});
+}
+setInterval(updateClock,1000);
+updateClock();
+
+// מזג אוויר כפר סבא
+fetch("https://api.open-meteo.com/v1/forecast?latitude=32.1750&longitude=34.9060&current=temperature_2m,weather_code&timezone=Asia%2FJerusalem")
+.then(r=>r.json())
+.then(data=>{
+  document.getElementById("temp").innerText=
+    Math.round(data.current.temperature_2m)+"°";
+  document.getElementById("weatherDesc").innerText=
+    "קוד מזג אוויר: "+data.current.weather_code;
+});
+
+// חדשות ynet (RSS פשוט)
+fetch("https://api.allorigins.win/get?url="+encodeURIComponent("https://www.ynet.co.il/Integration/StoryRss2.xml"))
+.then(r=>r.json())
+.then(data=>{
+  const parser=new DOMParser();
+  const xml=parser.parseFromString(data.contents,"text/xml");
+  const items=xml.querySelectorAll("item");
+  let titles="";
+  items.forEach((item,i)=>{
+    if(i<10){
+      titles+=" • "+item.querySelector("title").textContent;
+    }
+  });
+  document.getElementById("news").innerText=titles;
+});
+</script>
+
+</body>
+</html>
