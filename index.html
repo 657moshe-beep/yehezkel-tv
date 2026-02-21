@@ -140,8 +140,10 @@ font-size:22px;
 }
   
 .day .icon{
-  font-size:34px;
-  margin:4px 0 6px;
+  font-size: 40px;
+  margin: 8px 0;
+  line-height: 1;
+}
 }
 
 .weather-now{
@@ -224,31 +226,70 @@ async function loadWeather(){
 
   document.getElementById("weatherDesc").innerText = "כעת";
 
-  // ימים הבאים
-  const heb = ["א׳","ב׳","ג׳","ד׳","ה׳","ו׳","ש׳"];
-  const nDays = Math.min(5, data.daily.time.length);
+ // ===== Weather code -> icon + text =====
+const dayNames = ["א","ב","ג","ד","ה","ו","ש"];
 
-  const dailyHtml = Array.from({length:nDays}, (_,i)=>{
-    const dt = new Date(data.daily.time[i]);
-    const dayName = heb[dt.getDay()];
-    const mx = Math.round(data.daily.temperature_2m_max[i]);
-   const mn = Math.round(data.daily.temperature_2m_min[i]);
-const code = data.daily.weather_code[i];
-let icon = "☀️";
+function iconFor(code){
+  if (code === 0) return "☀️";
+  if (code >= 1 && code <= 3) return "⛅️";
+  if (code === 45 || code === 48) return "🌫️";
 
-if(code >= 1 && code <= 3) icon = "⛅";
-if(code >= 45 && code <= 48) icon = "🌫️";
-if(code >= 51 && code <= 67) icon = "🌧️";
-if(code >= 71 && code <= 77) icon = "❄️";
-if(code >= 80 && code <= 99) icon = "⛈️";    
-    return `<div class="day">
-  <div class="d">${dayName}</div>
-  <div style="font-size:40px; margin:8px 0;">${icon}</div>
-  <div class="deg">${mx}° / ${mn}°</div>
-</div>`;
-  }).join("");
+  // drizzle / rain
+  if (code >= 51 && code <= 57) return "🌦️";
+  if (code >= 61 && code <= 67) return "🌧️";
 
-  document.getElementById("daily").innerHTML = dailyHtml;
+  // snow
+  if (code >= 71 && code <= 77) return "❄️";
+  if (code >= 85 && code <= 86) return "🌨️";
+
+  // showers
+  if (code >= 80 && code <= 82) return "🌧️";
+
+  // thunder
+  if (code >= 95 && code <= 99) return "⛈️";
+
+  return "🌡️";
+}
+
+function textFor(code){
+  if (code === 0) return "בהיר";
+  if (code >= 1 && code <= 3) return "מעונן חלקית";
+  if (code === 45 || code === 48) return "ערפל";
+  if (code >= 51 && code <= 57) return "טפטוף";
+  if (code >= 61 && code <= 67) return "גשם";
+  if (code >= 71 && code <= 77) return "שלג";
+  if (code >= 80 && code <= 82) return "ממטרים";
+  if (code >= 85 && code <= 86) return "ממטרי שלג";
+  if (code >= 95 && code <= 99) return "סופות רעמים";
+  return "מזג אוויר";
+}
+
+// ===== "Now" =====
+const nowCode = data.current.weather_code;
+document.getElementById("nowIcon").innerText = iconFor(nowCode);
+document.getElementById("weatherDesc").innerText = "כעת · " + textFor(nowCode);
+
+// ===== Next days =====
+const nDays = Math.min(5, data.daily.time.length);
+
+const dailyHtml = Array.from({ length: nDays }, (_, i) => {
+  const dt = new Date(data.daily.time[i]);
+  const dayName = dayNames[dt.getDay()];
+
+  const mx = Math.round(data.daily.temperature_2m_max[i]);
+  const mn = Math.round(data.daily.temperature_2m_min[i]);
+  const code = data.daily.weather_code[i];
+
+  return `
+    <div class="day">
+      <div class="d">${dayName}</div>
+      <div class="icon">${iconFor(code)}</div>
+      <div class="deg">${mx}° / ${mn}°</div>
+    </div>
+  `;
+}).join("");
+
+document.getElementById("daily").innerHTML = dailyHtml;
 }
 
 loadWeather();
