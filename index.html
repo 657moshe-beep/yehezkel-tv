@@ -4,7 +4,7 @@ index.html
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Yehezkel</title>
+<title>יחזקאל 7</title>
 
 <style>
 :root{
@@ -93,18 +93,19 @@ main{
   bottom:0;
   left:0;
   right:0;
-  height:60px;
+  height:90px;
   background:rgba(0,0,0,.8);
   display:flex;
   align-items:center;
-  padding:0 30px;
+  padding:0 34px;
   overflow:hidden;
-  font-size:22px;
+  font-size:34px;
+  font-weight:800;
 }
 
 .marquee{
   white-space:nowrap;
-  animation:scroll 30s linear infinite;
+  animation:scroll 70s linear infinite;
 }
 
 @keyframes scroll{
@@ -133,7 +134,8 @@ main{
   <div class="card">
     <h2>מזג אוויר - כפר סבא</h2>
     <div class="weather-temp" id="temp">--°</div>
-    <div class="weather-desc" id="weatherDesc">טוען נתונים...</div>
+  <div class="weather-desc" id="weatherDesc">טוען נתונים...</div>
+<div class="daily" id="daily"></div>
   </div>
 </main>
 
@@ -151,15 +153,46 @@ function updateClock(){
 setInterval(updateClock,1000);
 updateClock();
 
-// מזג אוויר כפר סבא
-fetch("https://api.open-meteo.com/v1/forecast?latitude=32.1750&longitude=34.9060&current=temperature_2m,weather_code&timezone=Asia%2FJerusalem")
-.then(r=>r.json())
-.then(data=>{
-  document.getElementById("temp").innerText=
-    Math.round(data.current.temperature_2m)+"°";
-  document.getElementById("weatherDesc").innerText=
-    "קוד מזג אוויר: "+data.current.weather_code;
-});
+// מזג אוויר כפר סבא - ימים הבאים
+async function loadWeather(){
+  const LAT = 32.1750, LON = 34.9060;
+
+  const url =
+    `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}` +
+    `&current=temperature_2m` +
+    `&daily=weather_code,temperature_2m_max,temperature_2m_min` +
+    `&timezone=Asia%2FJerusalem`;
+
+  const r = await fetch(url);
+  const data = await r.json();
+
+  // טמפרטורה עכשיו
+  document.getElementById("temp").innerText =
+    Math.round(data.current.temperature_2m) + "°";
+
+  document.getElementById("weatherDesc").innerText = "כעת";
+
+  // ימים הבאים
+  const heb = ["א׳","ב׳","ג׳","ד׳","ה׳","ו׳","ש׳"];
+  const nDays = Math.min(5, data.daily.time.length);
+
+  const dailyHtml = Array.from({length:nDays}, (_,i)=>{
+    const dt = new Date(data.daily.time[i]);
+    const dayName = heb[dt.getDay()];
+    const mx = Math.round(data.daily.temperature_2m_max[i]);
+    const mn = Math.round(data.daily.temperature_2m_min[i]);
+
+    return `<div class="day">
+      <div class="d">${dayName}</div>
+      <div class="deg">${mx}° / ${mn}°</div>
+    </div>`;
+  }).join("");
+
+  document.getElementById("daily").innerHTML = dailyHtml;
+}
+
+loadWeather();
+setInterval(loadWeather, 30*60*1000);
 
 // חדשות ynet (RSS פשוט)
 fetch("https://api.allorigins.win/get?url="+encodeURIComponent("https://www.ynet.co.il/Integration/StoryRss2.xml"))
