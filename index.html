@@ -112,19 +112,28 @@ main{
   from{transform:translateX(-10%)}
   to{transform:translateX(100%)}
 }
-  .daily{
+ ..daily{
   display:flex;
   gap:14px;
   margin-top:16px;
+  flex-wrap:nowrap;
+  overflow-x:auto;
+  padding-bottom:6px;
+
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.daily::-webkit-scrollbar{ display:none; }
 }
 
 .day{
   min-width:140px;
   text-align:center;
-  background: rgba(255,255,255,.05);
+  background:rgba(255,255,255,.05);
   border:1px solid rgba(255,255,255,.1);
   border-radius:18px;
   padding:14px 12px;
+  flex:0 0 auto;
 }
 
 .day .d{
@@ -209,21 +218,26 @@ updateClock();
 // מזג אוויר כפר סבא - ימים הבאים
 async function loadWeather(){
   const LAT = 32.1750, LON = 34.9060;
-
-  const url =
-    `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}` +
-    `&current=temperature_2m` +
-    `&daily=weather_code,temperature_2m_max,temperature_2m_min` +
-    `&timezone=Asia%2FJerusalem`;
-
+const url =
+  `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}` +
+  `&current=temperature_2m,weather_code,is_day` +
+  `&daily=weather_code,temperature_2m_max,temperature_2m_min` +
+  `&timezone=Asia%2FJerusalem`;
   const r = await fetch(url);
   const data = await r.json();
 
   // טמפרטורה עכשיו
   document.getElementById("temp").innerText =
     Math.round(data.current.temperature_2m) + "°";
+const nowCode = data.current.weather_code;
+const isDay = data.current.is_day === 1;
 
-  document.getElementById("weatherDesc").innerText = "כעת";
+document.getElementById("weatherDesc").innerText =
+  "כעת · " + weatherText(nowCode);
+
+document.getElementById("nowIcon").innerText =
+  iconFor(nowCode, isDay);  
+  //document.getElementById("weatherDesc").innerText = "כעת";
 
  // ===== Weather code -> icon + text =====
 const dayNames = ["א","ב","ג","ד","ה","ו","ש"];
