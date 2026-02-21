@@ -134,16 +134,16 @@ main{
 }
 
 .day .deg{
-  margin-top:10px;
+  margin-top:8px;
   font-weight:900;
-  font-size:20px;
+  font-size:22px;
 }</style>
 </head>
 
 <body>
 
 <header>
-  <h1>Yehezkel</h1>
+  <h1>יחזקאל 7</h1>
   <div class="clock" id="clock"></div>
 </header>
 
@@ -152,7 +152,7 @@ main{
     <h2>הודעות</h2>
     <div class="msg" id="message">
       ברוכים הבאים ללובי 🏢<br>
-      נא לשמור על ניקיון הבניין.
+      נא לשמור על השקט וניקיון הבניין.
     </div>
   </div>
 
@@ -205,12 +205,20 @@ async function loadWeather(){
     const dt = new Date(data.daily.time[i]);
     const dayName = heb[dt.getDay()];
     const mx = Math.round(data.daily.temperature_2m_max[i]);
-    const mn = Math.round(data.daily.temperature_2m_min[i]);
+   const mn = Math.round(data.daily.temperature_2m_min[i]);
+const code = data.daily.weather_code[i];
+let icon = "☀️";
 
+if(code >= 1 && code <= 3) icon = "⛅";
+if(code >= 45 && code <= 48) icon = "🌫️";
+if(code >= 51 && code <= 67) icon = "🌧️";
+if(code >= 71 && code <= 77) icon = "❄️";
+if(code >= 80 && code <= 99) icon = "⛈️";    
     return `<div class="day">
-      <div class="d">${dayName}</div>
-      <div class="deg">${mx}° / ${mn}°</div>
-    </div>`;
+  <div class="d">${dayName}</div>
+  <div style="font-size:40px; margin:8px 0;">${icon}</div>
+  <div class="deg">${mx}° / ${mn}°</div>
+</div>`;
   }).join("");
 
   document.getElementById("daily").innerHTML = dailyHtml;
