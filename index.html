@@ -226,9 +226,7 @@ function updateClock(){
   month: "long",
   year: "numeric"
 }).format(now)
-  .replace(/\d+/g, num =>
-    new Intl.NumberFormat("he-IL-u-nu-hebr").format(num)
-  );
+  
   document.getElementById("clock").innerHTML =
     time + " | " + date + "<br>" + hebrewDate;
 }
