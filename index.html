@@ -309,10 +309,10 @@ fetch(
  "https://yne-ptoxy0.657moshe.workers.dev/?url=" +
     encodeURIComponent("https://www.ynet.co.il/Integration/StoryRss2.xml")
 )
-  .then((r) => r.json())
-  .then((data) => {
-    const parser = new DOMParser();
-    const xml = parser.parseFromString(data.contents, "text/xml");
+ .then((r) => r.text())
+.then((data) => {
+  const parser = new DOMParser();
+  const xml = parser.parseFromString(data, "text/xml");
     const items = xml.querySelectorAll("item");
 
     let titles = "";
