@@ -238,8 +238,28 @@ document.getElementById("nowIcon").innerText =
   iconFor(nowCode, isDay);  
   //document.getElementById("weatherDesc").innerText = "כעת";
 
+  const dayNames = ["א","ב","ג","ד","ה","ו","ש"];
+  // ===== Next days =====
+const nDays = Math.min(5, data.daily.time.length);
+
+let dailyHtml = "";
+for (let i = 0; i < nDays; i++) {
+  const max = Math.round(data.daily.temperature_2m_max[i]);
+  const min = Math.round(data.daily.temperature_2m_min[i]);
+  const code = data.daily.weather_code[i];
+
+  dailyHtml += `
+    <div class="day">
+      <div>${dayNames[i] || ""}</div>
+      <div>${min}° / ${max}°</div>
+      <div>${iconFor(code, true)}</div>
+    </div>
+  `;
+}
+
+document.getElementById("daily").innerHTML = dailyHtml;   
  // ===== Weather code -> icon + text =====
-const dayNames = ["א","ב","ג","ד","ה","ו","ש"];
+}
 
 function iconFor(code, isDay){
   if (code === 0) return "☀️";
