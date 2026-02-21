@@ -222,11 +222,11 @@ const url =
   `&current=temperature_2m,weather_code,is_day` +
   `&daily=weather_code,temperature_2m_max,temperature_2m_min` +
  `&timezone=Asia%2FJerusalem`;
-  const dayNames = ["ש","ו","ה","ד","ג","ב","א"];
+  const dayNames = ["א","ב","ג","ד","ה","ו","ש"];
   const r = await fetch(url);
   const data = await r.json();
 // ===== Next days =====
-const nDays = Math.min(5, data.daily.time.length);
+const nDays = Math.min(7, data.daily.time.length);
 let dailyHtml = "";
 for (let i = 0; i < nDays; i++) {
   const dt = new Date(data.daily.time[i]);
