@@ -323,22 +323,27 @@ document.getElementById("daily").innerHTML = dailyHtml;
 loadWeather();
 setInterval(loadWeather, 30*60*1000);
 
-// חדשות ynet (RSS פשוט)
-fetch("https://api.allorigins.win/get?url="+encodeURIComponent("https://www.ynet.co.il/Integration/StoryRss2.xml"))
-.then(r=>r.json())
-.then(data=>{
-  const parser=new DOMParser();
-  const xml=parser.parseFromString(data.contents,"text/xml");
-  const items=xml.querySelectorAll("item");
-  let titles="";
-  items.forEach((item,i)=>{
-    if(i<10){
-      titles+=" • "+item.querySelector("title").textContent;
-    }
-  });
-  document.getElementById("news").innerText=titles;
-});
-</script>
+// חדשות ynet (RSS)
+fetch(
+  "https://api.allorigins.win/get?url=" +
+    encodeURIComponent("https://www.ynet.co.il/Integration/StoryRss2.xml")
+)
+  .then((r) => r.json())
+  .then((data) => {
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(data.contents, "text/xml");
+    const items = xml.querySelectorAll("item");
+
+    let titles = "";
+    items.forEach((item, i) => {
+      if (i < 10) {
+        titles += " • " + item.querySelector("title").textContent;
+      }
+    });
+
+    document.getElementById("news").innerText = titles;
+  })
+  .catch((err) => console.log("RSS error:", err));</script>
 
 </body>
 </html>
