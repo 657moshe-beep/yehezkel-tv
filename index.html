@@ -277,6 +277,59 @@ function hebrewYear(year) {
   return s;
 }
 
+async function loadShabbatInfo() {
+
+  const today = new Date();
+  const day = today.getDay(); // 5 = שישי, 6 = שבת
+
+  if (day !== 5 && day !== 6) return;
+
+  const box = document.getElementById("shabbatBox");
+  box.style.display = "block";
+
+  // קואורדינטות כפר סבא
+  const lat = 32.175;
+  const lon = 34.906;
+
+  try {
+
+    // קבלת פרשה וזמנים מ-hebcal
+    const response = await fetch(
+      `https://www.hebcal.com/shabbat?cfg=json&latitude=${lat}&longitude=${lon}&tzid=Asia/Jerusalem`
+    );
+
+    const data = await response.json();
+
+    const parasha = data.parsha || "";
+    const candles = data.items.find(i => i.category === "candles")?.title || "";
+
+    // טקסט קצר אוטומטי
+    const parashaSummary = `
+    בפרשה זו אנו לומדים על ערכים חשובים של אמונה,
+    אחריות ומעשים טובים. כל שבוע הוא הזדמנות להתחזק
+    ולחבר את הבית לאור של שבת.
+    `;
+
+    box.innerHTML = `
+      <div style="font-size:26px;margin-bottom:10px;">
+        פרשת השבוע: ${parasha}
+      </div>
+
+      <div style="margin-bottom:10px;">
+        🕯 ${candles}
+      </div>
+
+      <div style="font-size:18px;line-height:1.6;">
+        ${parashaSummary}
+      </div>
+    `;
+
+  } catch (err) {
+    console.log("Shabbat error:", err);
+  }
+}
+
+loadShabbatInfo();  
 setInterval(updateClock, 1000);
 updateClock();
 // מזג אוויר כפר סבא - ימים הבאים
