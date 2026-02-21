@@ -224,8 +224,27 @@ const url =
   `&timezone=Asia%2FJerusalem`;
   const r = await fetch(url);
   const data = await r.json();
+// ===== Next days =====
+const nDays = Math.min(5, data.daily.time.length);
+let dailyHtml = "";
+for (let i = 0; i < nDays; i++) {
+  const dt = new Date(data.daily.time[i]);
+  const dayName = dayNames[dt.getDay()];
 
-  // טמפרטורה עכשיו
+  const max = Math.round(data.daily.temperature_2m_max[i]);
+  const min = Math.round(data.daily.temperature_2m_min[i]);
+  const code = data.daily.weather_code[i];
+
+  dailyHtml += `
+    <div class="day">
+      <div class="d">${dayName}</div>
+      <div class="icon">${iconFor(code, true)}</div>
+      <div class="deg">${min}° / ${max}°</div>
+    </div>
+  `;
+}
+
+document.getElementById("daily").innerHTML = dailyHtml;   // טמפרטורה עכשיו
   document.getElementById("temp").innerText =
     Math.round(data.current.temperature_2m) + "°";
 const nowCode = data.current.weather_code;
@@ -297,27 +316,7 @@ function textFor(code){
 }
 
 
-// ===== Next days =====
-const nDays = Math.min(5, data.daily.time.length);
-let dailyHtml = "";
-for (let i = 0; i < nDays; i++) {
-  const dt = new Date(data.daily.time[i]);
-  const dayName = dayNames[dt.getDay()];
 
-  const max = Math.round(data.daily.temperature_2m_max[i]);
-  const min = Math.round(data.daily.temperature_2m_min[i]);
-  const code = data.daily.weather_code[i];
-
-  dailyHtml += `
-    <div class="day">
-      <div class="d">${dayName}</div>
-      <div class="icon">${iconFor(code, true)}</div>
-      <div class="deg">${min}° / ${max}°</div>
-    </div>
-  `;
-}
-
-document.getElementById("daily").innerHTML = dailyHtml; 
   
 loadWeather();
 setInterval(loadWeather, 30*60*1000);
