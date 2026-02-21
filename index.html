@@ -221,7 +221,8 @@ const url =
   `https://api.open-meteo.com/v1/forecast?latitude=${LAT}&longitude=${LON}` +
   `&current=temperature_2m,weather_code,is_day` +
   `&daily=weather_code,temperature_2m_max,temperature_2m_min` +
-  `&timezone=Asia%2FJerusalem`;
+ `&timezone=Asia%2FJerusalem`;
+  const dayNames = ["ש","ו","ה","ד","ג","ב","א"];
   const r = await fetch(url);
   const data = await r.json();
 // ===== Next days =====
