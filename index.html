@@ -276,10 +276,6 @@ function textFor(code){
   return "מזג אוויר";
 }
 
-// ===== "Now" =====
-const nowCode = data.current.weather_code;
-document.getElementById("nowIcon").innerText = iconFor(nowCode);
-document.getElementById("weatherDesc").innerText = "כעת · " + textFor(nowCode);
 
 // ===== Next days =====
 const nDays = Math.min(5, data.daily.time.length);
