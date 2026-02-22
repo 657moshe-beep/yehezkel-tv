@@ -537,19 +537,13 @@ fetch(
     });
 const newsEl = document.getElementById("news");
 const cloneEl = document.getElementById("newsClone");
-const track = document.getElementById("tickerTrack");
+  const text = (titles && titles.trim().length > 0)
+  ? titles
+  : "אין חדשות כרגע";
 
-if (!newsEl || !cloneEl || !track) {
-  console.log("Missing ticker elements");
-} else {
-  const text = (titles && titles.trim().length > 0) ? titles : "אין חדשות כרגע";  newsEl.innerText = text;
-  cloneEl.innerText = text;
-
-  track.style.animation = "none";
-  track.offsetHeight; // reflow
-  track.style.animation = "";
-}   
-})
+if (newsEl) newsEl.innerText = text;
+if (cloneEl) cloneEl.innerText = text;
+});
 .catch((err) => console.log("RSS error:", err));
 
 
