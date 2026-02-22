@@ -95,53 +95,63 @@ body{
   color:var(--muted);
 }
 
- /* ===== NEWS TICKER ===== */
-
 .ticker{
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 70px;
+  height: 90px;
   display: flex;
-  background: #111;
   z-index: 9999;
-  direction: 1tr;
+  background: rgba(0,0,0,0.75);
   overflow: hidden;
 }
 
 .ticker-label{
-  background: #e10600;
-  color: #fff;
-  font-weight: 900;
-  font-size: 28px;
-  padding: 0 30px;
-  display: flex;
- align-items: center;
-  position:relative;
-  z-index: 5;
+  background:#e10600;
+  color:#fff;
+  font-weight:900;
+  font-size:32px;
+  padding:15px 35px;
+  white-space:nowrap;
+  flex: 0 0 auto;
+  z-index: 2;
 }
 
+/* החלון של הכתוביות */
 .ticker-window{
-  flex: 1;
+  flex: 1 1 auto;
   overflow: hidden;
   display: flex;
   align-items: center;
 }
 
-.ticker-text{
-  white-space: nowrap;
-  color: #fff;
-  font-size: 28px;
-  font-weight: 700;
-  animation: tickerMove 120s linear infinite;
+/* המסילה – רצה משמאל לימין או מימין לשמאל לפי האנימציה */
+.ticker-track{
+  display: flex;
+  width: max-content;
+  gap: 60px;
+  will-change: transform;
+ animation: tickerScroll 120s linear infinite; /* מהירות - נשנה אם צריך */
+  position:relative;
+  z-index: 1;
 }
 
-@keyframes tickerMove{
-  from { transform: translateX(-100%); }
-  to   { transform: translateX(100%); }
+/* שני עותקים של הטקסט */
+.ticker-item{
+  white-space: nowrap;
+  font-size: 40px;
+  font-weight: 700;
+  color: #fff;
+  direction: rtl;
 }
-.daily{
+
+/* ✅ זה הכיוון: מתחיל משמאל ונכנס ימינה */
+@keyframes tickerScroll{
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0%); }
+}
+  .daily{
   display:flex;
   gap:14px;
   margin-top:0 16px;
@@ -274,14 +284,16 @@ body {
   <div class="daily" id="daily"></div>
 </div>
 </main>
-<div class="ticker">
+ <div class="ticker">
   <div class="ticker-label">חדשות</div>
+
   <div class="ticker-window">
-    <div class="ticker-text">
-      <span id="news">טוען חדשות...</span>
+    <div class="ticker-track" id="tickerTrack">
+      <div class="ticker-item" id="news">טוען חדשות...</div>
+      <div class="ticker-item" aria-hidden="true" id="newsClone">טוען חדשות...</div>
     </div>
   </div>
-</div>  
+</div>
   <script>
 // שעון
 function updateClock(){
@@ -522,8 +534,18 @@ fetch(
       }
     });
 
-    document.getElementById("news").innerText = titles;
-  })
+    const newsEl = document.getElementById("news");
+const cloneEl = document.getElementById("newsClone");
+const track = document.getElementById("tickerTrack");
+
+newsEl.innerText = titles;
+cloneEl.innerText = titles;
+
+/* חשוב: לאפס את האנימציה כדי שיתחיל מיד בלי “תקיעה” */
+track.style.animation = "none";
+track.offsetHeight; // reflow
+track.style.animation = "";
+})
 .catch((err) => console.log("RSS error:", err));
 
 
