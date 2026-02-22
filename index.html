@@ -518,42 +518,41 @@ function textFor(code){
 loadWeather();
 setInterval(loadWeather, 30*60*1000);
 
-// חדשות ynet (RSS)
-fetch(
- "https://yne-ptoxy0.657moshe.workers.dev/?url=" +
-    encodeURIComponent("https://www.ynet.co.il/Integration/StoryRss2.xml")
-)
- .then((r) => r.text())
-.then((data) => {
-  const parser = new DOMParser();
-  const xml = parser.parseFromString(data, "text/xml");
-    const items = xml.querySelectorAll("item");
+function loadNews() {
+  fetch(
+    "https://yne-ptoxy0.657moshe.workers.dev/?url=" +
+      encodeURIComponent("https://www.ynet.co.il/Integration/StoryRss2.xml")
+  )
+    .then((r) => r.text())
+    .then((data) => {
+      const xml = new DOMParser().parseFromString(data, "text/xml");
+      const items = Array.from(xml.querySelectorAll("item")).slice(0, 10);
 
-    let titles = "";
-    items.forEach((item, i) => {
-      if (i < 10) {
-        titles += " • " + item.querySelector("title").textContent;
+      const titles = items
+        .map((it) => it.querySelector("title")?.textContent?.trim())
+        .filter(Boolean);
+
+      const text = titles.length ? titles.join(" • ") : "אין חדשות כרגע";
+
+      const newsEl = document.getElementById("news");
+      const cloneEl = document.getElementById("newsClone");
+      const track = document.getElementById("tickerTrack");
+
+      if (newsEl) newsEl.textContent = text;
+      if (cloneEl) cloneEl.textContent = text;
+
+      if (track) {
+        track.style.animation = "none";
+        track.offsetHeight;
+        track.style.animation = "";
       }
-    });
-const newsEl = document.getElementById("news");
-const cloneEl = document.getElementById("newsClone");
-  const text = (titles && titles.trim().length > 0)
-  ? titles
-  : "אין חדשות כרגע";
-
-if (newsEl) newsEl.innerText = text;
-if (cloneEl) cloneEl.innerText = text;
-  const track = document.getElementById("tickerTrack");
-
-if (track) {
-  track.style.animation = "none";
-  track.offsetHeight; // force reflow
-  track.style.animation = "";
+    })
+    .catch((err) => console.log("RSS error:", err));
 }
-})
-.catch((err) => console.log("RSS error:", err));
 
-
+loadNews();
+setInterval(loadNews, 10 * 60 * 1000);
+    
 // רענון כל שעה
 setInterval(function() {
   location.reload();
