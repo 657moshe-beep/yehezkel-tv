@@ -187,6 +187,7 @@ font-size:22px;
   align-items: stretch;
   background: rgba(0,0,0,0.8);
 direction: rtl;
+overflow:hidden;
   }
   
 .ticker-label{
@@ -195,15 +196,19 @@ direction: rtl;
   font-weight:800;
   font-size:32px;
   padding:15px 35px;
+  white-space: nowrap;
+  flex: 0 0 auto;  
 }  
 .ticker .marquee {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
   font-size: 40px;
   padding: 15px 30px;
   white-space: nowrap;
   display:flex;
   align-items:center;
 }
-
 main {
   transform: scale(0.70);
  transform-origin: top center;
