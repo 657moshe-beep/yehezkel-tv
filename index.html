@@ -542,8 +542,7 @@ const track = document.getElementById("tickerTrack");
 if (!newsEl || !cloneEl || !track) {
   console.log("Missing ticker elements");
 } else {
-  const text = titles || "בדיקה עובד";
-  newsEl.innerText = text;
+  const text = (titles && titles.trim().length > 0) ? titles : "אין חדשות כרגע";  newsEl.innerText = text;
   cloneEl.innerText = text;
 
   track.style.animation = "none";
