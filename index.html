@@ -95,50 +95,49 @@ body{
   color:var(--muted);
 }
 
-  /* ===== NEWS TICKER ===== */
+ /* ===== NEWS TICKER ===== */
 
-.ticker {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    align-items: center;
-    background: rgba(0,0,0,0.85);
-    height: 70px;
-    z-index: 9999;
-    overflow: hidden;
-    direction: rtl;
+.ticker{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  display: flex;
+  background: #111;
+  z-index: 9999;
+  direction: rtl;
+  overflow: hidden;
 }
 
-.ticker-label {
-    background: #e10600;
-    color: white;
-    font-weight: 900;
-    font-size: 28px;
-    padding: 0 30px;
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
+.ticker-label{
+  background: #e10600;
+  color: #fff;
+  font-weight: 900;
+  font-size: 28px;
+  padding: 0 30px;
+  display: flex;
+  align-items: center;
 }
 
-.ticker-window {
-    flex: 1;
-    overflow: hidden;
-    position: relative;
+.ticker-window{
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
 }
 
-.ticker-text {
-    position: absolute;
-    white-space: nowrap;
-    font-size: 28px;
-    font-weight: 700;
-    animation: tickerMove 60s linear infinite;
+.ticker-text{
+  white-space: nowrap;
+  color: #fff;
+  font-size: 28px;
+  font-weight: 700;
+  animation: tickerMove 40s linear infinite;
 }
 
-@keyframes tickerMove {
-    from { transform: translateX(100%); }
-    to { transform: translateX(-100%); }  
+@keyframes tickerMove{
+  from { transform: translateX(100%); }
+  to   { transform: translateX(-100%); }
 }
 .daily{
   display:flex;
@@ -273,16 +272,14 @@ body {
   <div class="daily" id="daily"></div>
 </div>
 </main>
-
 <div class="ticker">
-    <div class="ticker-label">חדשות</div>
-    <div class="ticker-window">
-        <div class="ticker-text" id="news">
-            טוען חדשות...
-        </div>
+  <div class="ticker-label">חדשות</div>
+  <div class="ticker-window">
+    <div class="ticker-text">
+      <span id="news">טוען חדשות...</span>
     </div>
-</div>
-  
+  </div>
+</div>  
   <script>
 // שעון
 function updateClock(){
