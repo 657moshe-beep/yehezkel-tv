@@ -284,16 +284,18 @@ body {
   <div class="daily" id="daily"></div>
 </div>
 </main>
- <div class="ticker">
+
+  div class="ticker">
   <div class="ticker-label">חדשות</div>
 
   <div class="ticker-window">
     <div class="ticker-track" id="tickerTrack">
       <div class="ticker-item" id="news">טוען חדשות...</div>
-      <div class="ticker-item" aria-hidden="true" id="newsClone">טוען חדשות...</div>
+      <div class="ticker-item" id="newsClone" aria-hidden="true">טוען חדשות...</div>
     </div>
   </div>
 </div>
+  
   <script>
 // שעון
 function updateClock(){
@@ -533,19 +535,22 @@ fetch(
         titles += " • " + item.querySelector("title").textContent;
       }
     });
-
-    const newsEl = document.getElementById("news");
+const newsEl = document.getElementById("news");
 const cloneEl = document.getElementById("newsClone");
 const track = document.getElementById("tickerTrack");
 
-newsEl.innerText = titles;
-cloneEl.innerText = titles;
+if (!newsEl || !cloneEl || !track) {
+  console.log("Missing ticker elements");
+} else {
+  const text = titles || "בדיקה עובד";
+  newsEl.innerText = text;
+  cloneEl.innerText = text;
 
-/* חשוב: לאפס את האנימציה כדי שיתחיל מיד בלי “תקיעה” */
-track.style.animation = "none";
-track.offsetHeight; // reflow
-track.style.animation = "";
-})
+  track.style.animation = "none";
+  track.offsetHeight; // reflow
+  track.style.animation = "";
+}   
+});
 .catch((err) => console.log("RSS error:", err));
 
 
