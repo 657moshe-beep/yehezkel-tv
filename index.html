@@ -535,10 +535,9 @@ function loadNews() {
 
       const text = titles.length ? titles.join(" • ") : "אין חדשות כרגע";
 
-      const newsEl = document.getElementById("news");
-      const cloneEl = document.getElementById("newsClone");
-      const track = document.getElementById("tickerTrack");
-
+      const newsEl  = document.getElementById("news");
+const cloneEl = document.getElementById("newsClone");
+const track   = document.getElementById("tickerTrack");
       if (newsEl) newsEl.textContent = text;
       if (cloneEl) cloneEl.textContent = text;
 
