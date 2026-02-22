@@ -160,7 +160,6 @@ font-size:22px;
   margin: 8px 0;
   line-height: 1;
 }
-}
 
 .weather-now{
   display:flex;
@@ -175,8 +174,7 @@ font-size:22px;
   line-height:1;
 }
 
-/* טיקר קבוע בתחתית */
-  .ticker{
+.ticker{
   position: fixed;
   bottom: 0;
   left: 0;
@@ -185,31 +183,59 @@ font-size:22px;
 
   display: flex;
   align-items: stretch;
-  background: rgba(0,0,0,0.8);
-direction: rtl;
-overflow:hidden;
-  }
-  
-.ticker-label{
-  background:#e10600;
-  color:white;
-  font-weight:800;
-  font-size:32px;
-  padding:15px 35px;
-  white-space: nowrap;
-  flex: 0 0 auto;  
-}  
-.ticker .marquee {
-  flex: 1;
-  min-width: 0;
+  background: rgba(0,0,0,0.85);
+
+  direction: rtl;
   overflow: hidden;
-  font-size: 40px;
-  padding: 15px 30px;
-  white-space: nowrap;
-  display:flex;
-  align-items:center;
 }
-main {
+
+.ticker-label{
+  background: #e10600;
+  color: white;
+  font-weight: 900;
+  font-size: 32px;
+  padding: 15px 35px;
+  white-space: nowrap;
+  flex: 0 0 auto;
+
+  position: relative;
+  z-index: 2;          /* הכותרת מעל הטקסט */
+}
+
+.marquee{
+  flex: 1;
+  min-width: 0;        /* מונע “חיתוך” בפלקס */
+  overflow: hidden;
+  position: relative;
+}
+
+.marquee-track{
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.marquee-content{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+
+  white-space: nowrap;
+  font-size: 40px;
+  padding: 0 30px;
+  color: white;
+
+  /* זה חשוב: הטקסט רץ "מתחת" לכותרת */
+  z-index: 1;
+
+  animation: tickerMove 22s linear infinite;
+}
+
+@keyframes tickerMove{
+  from { transform: translate(100%, -50%); }
+  to   { transform: translate(-120%, -50%); }
+}
+  main {
   transform: scale(0.70);
  transform-origin: top center;
 }
@@ -257,7 +283,12 @@ body {
 
 <div class="ticker">
   <div class="ticker-label">חדשות</div>
-  <div class="marquee" id="news">טוען חדשות...</div>
+
+  <div class="marquee">
+    <div class="marquee-track">
+      <div class="marquee-content" id="news">כאן יהיה הטקסט...</div>
+    </div>
+  </div>
 </div>
   <script>
 // שעון
