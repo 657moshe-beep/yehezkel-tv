@@ -95,29 +95,6 @@ body{
   color:var(--muted);
 }
 
-.ticker{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  height:90px;
-  background:rgba(0,0,0,.8);
-  display:flex;
-  align-items:center;
-  padding:0 34px;
-  overflow:hidden;
-  font-size:34px;
-  font-weight:800;
-}
-
-.marquee{
-  white-space:nowrap;
-  animation:scroll 140s linear infinite;
-}
-
-@keyframes scroll{
-  from{transform:translateX(-10%)}
-  to{transform:translateX(100%)}
 }
 .daily{
   display:flex;
@@ -172,34 +149,6 @@ font-size:22px;
 .now-icon{
   font-size:42px;
   line-height:1;
-}
-
-.ticker{
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  z-index: 9999;
-
-  display: flex;
-  align-items: stretch;
-  background: rgba(0,0,0,0.85);
-
-  direction: rtl;
-  overflow: hidden;
-}
-
-.ticker-label{
-  background: #e10600;
-  color: white;
-  font-weight: 900;
-  font-size: 32px;
-  padding: 15px 35px;
-  white-space: nowrap;
-  flex: 0 0 auto;
-
-  position: relative;
-  z-index: 2;          /* הכותרת מעל הטקסט */
 }
 
 .marquee{
@@ -281,15 +230,7 @@ body {
 </div>
 </main>
 
-<div class="ticker">
-  <div class="ticker-label">חדשות</div>
 
-  <div class="marquee">
-    <div class="marquee-track">
-      <div class="marquee-content" id="news">כאן יהיה הטקסט...</div>
-    </div>
-  </div>
-</div>
   <script>
 // שעון
 function updateClock(){
