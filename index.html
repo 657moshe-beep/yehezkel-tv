@@ -519,7 +519,7 @@ var lastNewsText = "טוען חדשות...";
 
   function loadNews() {
   var feedUrl = "https://www.ynet.co.il/Integration/StoryRss2.xml";
-  var proxy = "https://yne-ptoxy0.657moshe.workers.dev/";
+  var proxy ="https://yne-ptoxy0.657moshe.workers.dev/";
 
   fetch(proxy + "?url=" + encodeURIComponent(feedUrl))
     .then(function (r) { return r.text(); })
