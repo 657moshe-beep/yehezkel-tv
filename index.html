@@ -95,54 +95,76 @@ body{
   color:var(--muted);
 }
 
+/* ===== NEWS TICKER (Left -> Right, swallowed under right red label) ===== */
+
 .ticker{
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   height: 90px;
-  display: flex;
-  z-index: 9999;
   background: rgba(0,0,0,0.75);
   overflow: hidden;
+  z-index: 9999;
 
-direction: rtl; /* חשוב כדי לשלוט בפלקס */
+  direction: ltr; /* התנועה משמאל לימין */
 }
 
-.ticker-window{
-  flex: 1 1 auto;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  position: relative;
-  z-index: 1;
-}
-
+/* האדום בימין - מעל הטקסט כדי ש"הטקסט ייבלע" */
 .ticker-label{
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
   background:#e10600;
   color:#fff;
   font-weight:900;
   font-size:32px;
   padding:15px 35px;
   white-space:nowrap;
-  flex: 0 0 auto;
-
-  order: 2;        /* מעביר לימין */
-  z-index: 5;      /* מעל הטקסט */
-  position: relative;
-
-  margin-left: -25px; /* “נוגס” קצת בטקסט כדי שיראה נבלע */
+  display:flex;
+  align-items:center;
+  z-index: 10;
 }
+
+/* חלון הטקסט (כל השורה) */
+.ticker-window{
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+/* המסילה */
 .ticker-track{
   display: flex;
   width: max-content;
   white-space: nowrap;
-  animation: tickerScrollLTR 220s linear infinite;
+  animation: tickerMoveLTR 220s linear infinite;
+  will-change: transform;
 }
 
-@keyframes tickerScrollLTR{
+/* הטקסט עצמו - עברית תקינה */
+.ticker-item{
+  white-space: nowrap;
+  font-size: 60px;
+  font-weight: 700;
+  color: #fff;
+
+  direction: rtl;
+  unicode-bidi: plaintext;
+
+  padding-left: 60px;
+}
+
+/* אנימציה: מתחיל מחוץ למסך משמאל ונכנס ימינה */
+@keyframes tickerMoveLTR{
   from { transform: translateX(-100%); }
-  to   { transform: translateX(100%); }
+  to   { transform: translateX(0); }
 }
   .daily{
   display:flex;
