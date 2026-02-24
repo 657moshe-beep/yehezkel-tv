@@ -133,10 +133,10 @@ body{
   display: flex;
   width: max-content;
   white-space: nowrap;
-  animation: tickerScroll 250s linear infinite;
+  animation: tickerScroll 220s linear infinite;
+  transform: scaleX(-1);
 }
 
-/* שני עותקים של הטקסט */
 .ticker-item{
   white-space: nowrap;
   font-size: 60px;
@@ -144,12 +144,13 @@ body{
   color: #fff;
   direction: rtl;
   padding-left:60px;
+  transform: scaleX(-1);
 }
 
 /* ✅ זה הכיוון: מתחיל משמאל ונכנס ימינה */
 @keyframes tickerScroll{
-  from { transform: translateX(-100%); }
-  to   { transform: translateX(0); }
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
   .daily{
   display:flex;
