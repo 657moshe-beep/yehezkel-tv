@@ -535,7 +535,7 @@ function loadNews() {
         }
       });
 
-      var text = titles.length ? titles.join(" • ") + " • " : "";
+    var text = titles.length ? (titles.join(" • ") + " • ").repeat(3) : "";
 
       if (text.length > 0) {
         lastNewsText = text;
