@@ -520,7 +520,7 @@ setInterval(loadWeather, 30*60*1000);
   var feedUrl = "https://www.ynet.co.il/Integration/StoryRss2.xml";
   var proxy = "https://yne-ptoxy0.657moshe.workers.dev/";
 
-  fetch(proxy + encodeURIComponent(feedUrl))
+  fetch(proxy + "?url=" + encodeURIComponent(feedUrl))
     .then(function (r) { return r.text(); })
     .then(function (data) {
 
