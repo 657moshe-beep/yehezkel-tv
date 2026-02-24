@@ -573,14 +573,8 @@ function loadNews(){
 }
 
 // טעינה ראשונית + עדכון כל 10 דקות
-loadNews();
-setInterval(loadNews, 10 * 60 * 1000);
-
-// רענון כל שעה (כמו שביקשת)
+loadNews(); 
 setInterval(() => location.reload(), 60 * 60 * 1000);
-
-
-}
 
   loadNews();
 setInterval(loadNews, 10 * 60 * 1000);
