@@ -518,42 +518,55 @@ setInterval(loadWeather, 30*60*1000);
 
 var lastNewsText = "טוען חדשות...";
 
-  function loadNews() {
-  var feedUrl = "https://www.ynet.co.il/Integration/StoryRss2.xml";
-  var proxy ="https://yne-ptoxy0.657moshe.workers.dev/";
+function loadNews() {
 
-  fetch(proxy + "?url=" + encodeURIComponent(feedUrl))
-    .then(function (r) { return r.text(); })
-    .then(function (data) {
+  fetch("https://yne-ptoxy0.657moshe.workers.dev/?url=https://www.ynet.co.il/Integration/StoryRss2.xml")
+  .then(res => res.text())
+  .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
+  .then(data => {
 
-      var xml = new DOMParser().parseFromString(data, "text/xml");
-      var items = xml.getElementsByTagName("item");
-
+      var items = data.querySelectorAll("item");
       var titles = [];
-      for (var i = 0; i < items.length && i < 10; i++) {
-        var t = items[i].getElementsByTagName("title")[0];
-        if (t && t.textContent) {
-          titles.push(t.textContent);
+
+      items.forEach((el, i) => {
+        if (i < 15) {
+          var t = el.querySelector("title");
+          if (t) titles.push(t.textContent.trim());
         }
-      }
+      });
 
       var text = titles.length ? titles.join(" • ") + " • " : "";
-if (text && text.trim().length > 0) {
-  lastNewsText = text;
-}
-var newsEl = document.getElementById("news");
-var cloneEl = document.getElementById("newsClone");
+
+      if (text.length > 0) {
+        lastNewsText = text;
+      }
+
+      var newsEl = document.getElementById("news");
+      var cloneEl = document.getElementById("newsClone");
 
       if (newsEl) newsEl.textContent = lastNewsText;
-if (cloneEl) cloneEl.textContent = lastNewsText;
-      
-    })
-    .catch(function (err) {
-      console.log("RSS error:", err);
-    });
+      if (cloneEl) cloneEl.textContent = lastNewsText;
+
+      // איפוס אנימציה כדי שלא ייעלם
+      var track = document.getElementById("tickerTrack");
+      if (track) {
+        track.style.animation = "none";
+        track.offsetHeight;
+        track.style.animation = "";
+      }
+
+  })
+  .catch(() => {
+      // אם יש שגיאה – לא מוחקים טקסט קיים
+      var newsEl = document.getElementById("news");
+      var cloneEl = document.getElementById("newsClone");
+
+      if (newsEl) newsEl.textContent = lastNewsText;
+      if (cloneEl) cloneEl.textContent = lastNewsText;
+  });
 }
 
-loadNews();
+  loadNews();
 setInterval(loadNews, 10 * 60 * 1000);
     
 // רענון כל שעה
