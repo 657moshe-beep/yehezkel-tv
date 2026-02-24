@@ -130,7 +130,7 @@ body{
 .ticker-track{
   display: flex;
   white-space: nowrap;
-  animation: tickerScroll 60s linear infinite;
+  animation: tickerScroll 120s linear infinite;
 }
 
 /* שני עותקים של הטקסט */
@@ -145,8 +145,8 @@ body{
 
 /* ✅ זה הכיוון: מתחיל משמאל ונכנס ימינה */
 @keyframes tickerScroll{
-  from { transform: translateX(100%); }
-  to   { transform: translateX(-100%); }
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
   .daily{
   display:flex;
