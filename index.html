@@ -115,15 +115,17 @@ body{
   padding:15px 35px;
   white-space:nowrap;
   flex: 0 0 auto;
-  z-index: 2;
+  z-index: 5;
 }
 
 /* החלון של הכתוביות */
-ticker-window{
+.ticker-window{
   flex: 1 1 auto;
   overflow: hidden;
   display: flex;
   align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
 /* המסילה – רצה משמאל לימין או מימין לשמאל לפי האנימציה */
@@ -146,7 +148,7 @@ ticker-window{
 
 /* ✅ זה הכיוון: מתחיל משמאל ונכנס ימינה */
 @keyframes tickerScroll{
-  from { transform: translateX(-50%); }
+  from { transform: translateX(-100%); }
   to   { transform: translateX(0); }
 }
   .daily{
