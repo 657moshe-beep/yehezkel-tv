@@ -515,6 +515,7 @@ function textFor(code){
 loadWeather();
 setInterval(loadWeather, 30*60*1000);
 
+var lastNewsText = "טוען חדשות...";
 
   function loadNews() {
   var feedUrl = "https://www.ynet.co.il/Integration/StoryRss2.xml";
