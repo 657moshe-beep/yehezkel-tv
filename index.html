@@ -537,13 +537,12 @@ var lastNewsText = "טוען חדשות...";
       }
 
       var text = titles.length ? titles.join(" • ") : "אין חדשות כרגע";
-
-      var newsEl = document.getElementById("news");
-      var cloneEl = document.getElementById("newsClone");
-
-      if (newsEl) newsEl.textContent = text;
-      if (cloneEl) cloneEl.textContent = text;
-
+if (text && text.trim().length > 0) {
+  lastNewsText = text;
+}
+      if (newsEl) newsEl.textContent = lastNewsText;
+if (cloneEl) cloneEl.textContent = lastNewsText;
+      
     })
     .catch(function (err) {
       console.log("RSS error:", err);
