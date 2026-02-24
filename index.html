@@ -540,6 +540,9 @@ var lastNewsText = "טוען חדשות...";
 if (text && text.trim().length > 0) {
   lastNewsText = text;
 }
+var newsEl = document.getElementById("news");
+var cloneEl = document.getElementById("newsClone");
+
       if (newsEl) newsEl.textContent = lastNewsText;
 if (cloneEl) cloneEl.textContent = lastNewsText;
       
