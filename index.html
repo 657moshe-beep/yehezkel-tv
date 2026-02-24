@@ -128,13 +128,9 @@ body{
 
 /* המסילה – רצה משמאל לימין או מימין לשמאל לפי האנימציה */
 .ticker-track{
-  display: flex;
-  width: max-content;
-  gap: 0px;
-  will-change: transform;
- animation: tickerScroll 40s linear infinite; /* מהירות - נשנה אם צריך */
-  position:relative;
-  z-index: 1;
+  display: inline-block;
+  white-space: nowrap;
+  animation: tickerScroll 60s linear infinite;
 }
 
 /* שני עותקים של הטקסט */
