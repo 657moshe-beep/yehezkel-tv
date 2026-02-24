@@ -299,16 +299,15 @@ body {
   <div class="daily" id="daily"></div>
 </div>
 </main>
-
-  <div class="ticker">
-  <div class="ticker-label">חדשות</div>
-
+<div class="ticker">
   <div class="ticker-window">
     <div class="ticker-track" id="tickerTrack">
       <div class="ticker-item" id="news">טוען חדשות...</div>
-    <div class="ticker-item" id="newsClone" aria-hidden="true">טוען חדשות...</div>
+      <div class="ticker-item" id="newsClone" aria-hidden="true"></div>
     </div>
   </div>
+
+  <div class="ticker-label">חדשות</div>
 </div>
   
   <script>
@@ -533,54 +532,54 @@ function textFor(code){
 loadWeather();
 setInterval(loadWeather, 30*60*1000);
 
-var lastNewsText = "טוען חדשות...";
+// ===== NEWS (keeps last text, duplicates for smooth loop, restarts animation cleanly) =====
+let lastNewsText = "טוען חדשות...";
 
-function loadNews() {
+function applyNewsText(text){
+  const newsEl = document.getElementById("news");
+  const cloneEl = document.getElementById("newsClone");
 
+  if (newsEl) newsEl.textContent = text;
+  if (cloneEl) cloneEl.textContent = text;
+
+  // ריסט אנימציה בלי "רגע ריק"
+  const track = document.getElementById("tickerTrack");
+  if (track){
+    track.style.animation = "none";
+    track.offsetHeight; // force reflow
+    track.style.animation = "";
+  }
+}
+
+function loadNews(){
   fetch("https://yne-ptoxy0.657moshe.workers.dev/?url=https://www.ynet.co.il/Integration/StoryRss2.xml")
-  .then(res => res.text())
-  .then(str => new window.DOMParser().parseFromString(str, "text/xml"))
-  .then(data => {
+    .then(r => r.text())
+    .then(str => new DOMParser().parseFromString(str, "text/xml"))
+    .then(xml => {
+      const items = Array.from(xml.querySelectorAll("item")).slice(0, 15);
+      const titles = items
+        .map(it => it.querySelector("title")?.textContent?.trim())
+        .filter(Boolean);
 
-      var items = data.querySelectorAll("item");
-      var titles = [];
+      const text = titles.length ? (titles.join(" • ") + " • ") : lastNewsText;
 
-      items.forEach((el, i) => {
-        if (i < 15) {
-          var t = el.querySelector("title");
-          if (t) titles.push(t.textContent.trim());
-        }
-      });
+      if (titles.length) lastNewsText = text;
+      applyNewsText(lastNewsText);
+    })
+    .catch(() => {
+      // במקרה של תקלה - לא מנקים, נשאר הטקסט האחרון
+      applyNewsText(lastNewsText);
+    });
+}
 
-    var text = titles.length ? (titles.join(" • ") + " • ").repeat(3) : "";
+// טעינה ראשונית + עדכון כל 10 דקות
+loadNews();
+setInterval(loadNews, 10 * 60 * 1000);
 
-      if (text.length > 0) {
-        lastNewsText = text;
-      }
+// רענון כל שעה (כמו שביקשת)
+setInterval(() => location.reload(), 60 * 60 * 1000);
 
-      var newsEl = document.getElementById("news");
-      var cloneEl = document.getElementById("newsClone");
 
-      if (newsEl) newsEl.textContent = lastNewsText;
-      if (cloneEl) cloneEl.textContent = lastNewsText;
-
-      // איפוס אנימציה כדי שלא ייעלם
-      var track = document.getElementById("tickerTrack");
-      if (track) {
-        track.style.animation = "none";
-        track.offsetHeight;
-        track.style.animation = "";
-      }
-
-  })
-  .catch(() => {
-      // אם יש שגיאה – לא מוחקים טקסט קיים
-      var newsEl = document.getElementById("news");
-      var cloneEl = document.getElementById("newsClone");
-
-      if (newsEl) newsEl.textContent = lastNewsText;
-      if (cloneEl) cloneEl.textContent = lastNewsText;
-  });
 }
 
   loadNews();
