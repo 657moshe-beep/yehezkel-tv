@@ -105,6 +105,17 @@ body{
   z-index: 9999;
   background: rgba(0,0,0,0.75);
   overflow: hidden;
+
+  direction: ltr; /* חשוב כדי לשלוט בפלקס */
+}
+
+.ticker-window{
+  flex: 1 1 auto;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
 .ticker-label{
@@ -115,42 +126,23 @@ body{
   padding:15px 35px;
   white-space:nowrap;
   flex: 0 0 auto;
-  z-index: 5;
-}
 
-/* החלון של הכתוביות */
-.ticker-window{
-  flex: 1 1 auto;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
+  order: 2;        /* מעביר לימין */
+  z-index: 5;      /* מעל הטקסט */
   position: relative;
-  z-index: 1;
-}
 
-/* המסילה – רצה משמאל לימין או מימין לשמאל לפי האנימציה */
+  margin-left: -25px; /* “נוגס” קצת בטקסט כדי שיראה נבלע */
+}
 .ticker-track{
   display: flex;
   width: max-content;
   white-space: nowrap;
-  animation: tickerScroll 220s linear infinite;
-  transform: scaleX(-1);
+  animation: tickerScrollLTR 220s linear infinite;
 }
 
-.ticker-item{
-  white-space: nowrap;
-  font-size: 60px;
-  font-weight: 700;
-  color: #fff;
-  direction: rtl;
-  padding-left:60px;
-  transform: scaleX(-1);
-}
-
-/* ✅ זה הכיוון: מתחיל משמאל ונכנס ימינה */
-@keyframes tickerScroll{
-  from { transform: translateX(0); }
-  to   { transform: translateX(50%); }
+@keyframes tickerScrollLTR{
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
 }
   .daily{
   display:flex;
