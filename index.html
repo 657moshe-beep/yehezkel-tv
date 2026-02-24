@@ -124,7 +124,6 @@ ticker-window{
   overflow: hidden;
   display: flex;
   align-items: center;
-  direction: ltr;   /* ✅ להוסיף */
 }
 
 /* המסילה – רצה משמאל לימין או מימין לשמאל לפי האנימציה */
@@ -147,8 +146,8 @@ ticker-window{
 
 /* ✅ זה הכיוון: מתחיל משמאל ונכנס ימינה */
 @keyframes tickerScroll{
-  from { transform: translateX(-100%); }  /* מתחיל מחוץ למסך משמאל */
-  to   { transform: translateX(100%); }   /* יוצא ימינה ונבלע לתוך “חדשות” */
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
 }
   .daily{
   display:flex;
