@@ -457,7 +457,7 @@ const url =
 // ===== Next days =====
 const nDays = Math.min(7, data.daily.time.length);
 let dailyHtml = "";
-for (let i = 0; i < nDays; i++) {
+for (let i = 0; i < 5; i++) {
   const dt = new Date(data.daily.time[i]);
   const dayName = dayNames[dt.getDay()];
 
