@@ -66,6 +66,11 @@ body{
   padding:30px;
   backdrop-filter:blur(20px);
 }
+/* תן לכל הכרטיסים גובה מינימלי יפה */
+.card{
+  min-height: 420px;
+}
+
 
 .card h2{
   margin-top:0;
@@ -86,6 +91,12 @@ padding: 10px 0;
   word-break: normal;
   overflow-wrap: normal;
 }
+/* שהתוכן בתוך הודעות לא יברח */
+.msg{
+  max-height: 330px;
+  overflow: auto;
+  }
+  
 .weather-temp{
   font-size:72px;
   font-weight:800;
