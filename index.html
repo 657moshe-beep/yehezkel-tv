@@ -374,6 +374,14 @@ body.independence{
 function updateClock(){
   const now = new Date();
 
+const day = now.getDay();   // 5=שישי, 6=שבת
+const hour = now.getHours();
+
+document.body.classList.toggle(
+  "shabbat",
+  (day === 5 && hour >= 1) || day === 6
+);
+
   const time = now.toLocaleTimeString("he-IL", {
     hour: "2-digit",
     minute: "2-digit"
