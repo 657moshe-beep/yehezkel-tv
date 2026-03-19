@@ -656,7 +656,7 @@ function applyHolidayTheme(){
   );
 
   /* שבת */
-  if(day === 5 || day === 6){
+ if((day === 5 && hour >= 1) || day === 6){
   document.body.classList.add("shabbat");
 }
 
