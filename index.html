@@ -553,7 +553,9 @@ box.style.display = "block";  // קואורדינטות כפר סבא
     const data = await response.json();
 
     const parasha = data.parsha || "";
-    const candles = data.items.find(i => i.category === "candles")?.title || "";
+    let candles = data.items.find(i => i.category === "candles")?.title || "";
+candles = candles.replace("Candle lighting", "הדלקת נרות");
+
 
     // טקסט קצר אוטומטי
     const parashaSummary = `
