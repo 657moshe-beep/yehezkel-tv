@@ -725,9 +725,18 @@ setInterval(loadNews, 10 * 60 * 1000);
 setInterval(function() {
   location.reload();
 }, 60 * 60 * 1000);
-// --- מנהל העיצובים של יחזקאל 7 ---
+// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---
 const ThemeController = {
   themes: ["shabbat", "purim", "hanukkah", "pesach", "roshhashana", "shavuot", "independence"],
+
+  // רשימת תמונות נוף לימי חול (אפשר להוסיף או לשנות קישורים בעתיד)
+  landscapes: [
+    "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=1920&auto=format&fit=crop", // נוף הרים ירוק
+    "https://images.unsplash.com/photo-1506744626753-dba37c2a9815?q=80&w=1920&auto=format&fit=crop", // נוף אגם שקט
+    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1920&auto=format&fit=crop", // הרים וערפל
+    "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920&auto=format&fit=crop", // ים בשקיעה
+    "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1920&auto=format&fit=crop"  // יער וטבע
+  ],
 
   async init() {
     await this.applyCurrentTheme();
@@ -738,14 +747,31 @@ const ThemeController = {
     const now = new Date();
     const day = now.getDay(); 
 
+    // 1. איפוס כל העיצובים והרקעים כדי שנוכל להתחיל מדף חלק
     document.body.classList.remove(...this.themes);
+    document.body.style.background = ""; 
 
+    // 2. בדיקת שבת
     if (day === 5 || day === 6) {
       document.body.classList.add("shabbat");
       return; 
     }
 
+    // 3. בדיקת חגים
     await this.applyHolidayTheme(now);
+
+    // 4. בדיקה: האם הופעל עיצוב של שבת או חג?
+    const hasTheme = this.themes.some(t => document.body.classList.contains(t));
+    
+    // אם לא הופעל שום חג (זה יום חול רגיל) - שמים תמונת נוף!
+    if (!hasTheme) {
+      // הגרלת תמונה אקראית מתוך הרשימה
+      const randomImg = this.landscapes[Math.floor(Math.random() * this.landscapes.length)];
+      
+      // הוספת התמונה לרקע עם שכבת הכהיה (כדי שהטקסט הלבן יבלוט)
+      document.body.style.background = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${randomImg}') no-repeat center center fixed`;
+      document.body.style.backgroundSize = "cover";
+    }
   },
 
   async applyHolidayTheme(now) {
