@@ -644,54 +644,56 @@ setInterval(loadNews, 10 * 60 * 1000);
 setInterval(function() {
   location.reload();
 }, 60 * 60 * 1000);
-function applyHolidayTheme(){
-  const now = new Date();
-  const month = now.getMonth()+1;
-  const date = now.getDate();
-  const day = now.getDay();
-  const hour = now.getHours();
+// --- מנהל העיצובים של יחזקאל 7 ---
+const ThemeController = {
+  themes: ["shabbat", "purim", "hanukkah", "pesach", "roshhashana", "shavuot", "independence"],
 
-  document.body.classList.remove(
-    "shabbat","purim","hanukkah",
-    "pesach","roshhashana",
-    "shavuot","independence"
-  );
+  async init() {
+    await this.applyCurrentTheme();
+    setInterval(() => this.applyCurrentTheme(), 60 * 60 * 1000);
+  },
 
-  /* שבת */
+  async applyCurrentTheme() {
+    const now = new Date();
+    const day = now.getDay(); 
 
-  /* פורים – לדוגמה 14 במרץ */
-  if(month === 3 && date === 14){
-    document.body.classList.add("purim");
+    document.body.classList.remove(...this.themes);
+
+    if (day === 5 || day === 6) {
+      document.body.classList.add("shabbat");
+      return; 
+    }
+
+    await this.applyHolidayTheme(now);
+  },
+
+  async applyHolidayTheme(now) {
+    try {
+      const res = await fetch('https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&year=now&month=now&ss=on&mf=on&c=off&geo=pos');
+      if (!res.ok) return;
+      
+      const data = await res.json();
+      const todayStr = now.toLocaleDateString('en-CA'); 
+      const todayEvent = data.items.find(item => item.date === todayStr);
+
+      if (todayEvent) {
+        const title = todayEvent.title.toLowerCase();
+        
+        if (title.includes("purim")) document.body.classList.add("purim");
+        else if (title.includes("chanukah")) document.body.classList.add("hanukkah");
+        else if (title.includes("pesach") || title.includes("passover")) document.body.classList.add("pesach");
+        else if (title.includes("rosh hashana")) document.body.classList.add("roshhashana");
+        else if (title.includes("shavuot")) document.body.classList.add("shavuot");
+        else if (title.includes("yom ha'atzmaut")) document.body.classList.add("independence");
+      }
+    } catch (error) {
+      console.log("שגיאה בטעינת עיצוב חגים:", error);
+    }
   }
+};
 
-  /* חנוכה – לדוגמה 25-31 בדצמבר */
-  if(month === 12 && date >= 25 && date <= 31){
-    document.body.classList.add("hanukkah");
-  }
-
-  /* פסח – לדוגמה אפריל 22-29 */
-  if(month === 4 && date >= 22 && date <= 29){
-    document.body.classList.add("pesach");
-  }
-
-  /* ראש השנה – לדוגמה ספטמבר 10-12 */
-  if(month === 9 && date >= 10 && date <= 12){
-    document.body.classList.add("roshhashana");
-  }
-
-  /* שבועות – לדוגמה יוני 1-2 */
-  if(month === 6 && date <= 2){
-    document.body.classList.add("shavuot");
-  }
-
-  /* יום העצמאות – לדוגמה 14 במאי */
-  if(month === 5 && date === 14){
-    document.body.classList.add("independence");
-  }
-}
-
-applyHolidayTheme();
-setInterval(applyHolidayTheme, 60*60*1000);
+// הפעלת המערכת כשהאתר עולה
+ThemeController.init();
 
 </script>
 </body>
