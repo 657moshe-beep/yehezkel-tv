@@ -304,6 +304,63 @@ body.shabbat .clock {
   color: #EEE8AA !important; 
 }
 
+/* ====== עיצוב יום העצמאות: כחול לבן וחגיגי ====== */
+body.independence {
+  background: linear-gradient(135deg, #0038b8 0%, #ffffff 50%, #0038b8 100%) !important;
+  background-size: 400% 400% !important;
+  animation: blueWhiteGradient 15s ease infinite !important;
+  color: #0038b8 !important;
+}
+
+@keyframes blueWhiteGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+body.independence::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: url('https://upload.wikimedia.org/wikipedia/commons/d/d4/Flag_of_Israel.svg') no-repeat center center;
+  background-size: 40% auto;
+  opacity: 0.1; 
+  z-index: -1;
+  animation: flagWave 5s ease-in-out infinite alternate;
+}
+
+@keyframes flagWave {
+  from { transform: scale(1) rotate(-2deg); }
+  to { transform: scale(1.1) rotate(2deg); }
+}
+
+body.independence .card {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border: 2px solid #0038b8 !important;
+  box-shadow: 0 10px 30px rgba(0, 56, 184, 0.3) !important;
+  color: #0038b8 !important;
+  backdrop-filter: blur(5px) !important;
+}
+
+body.independence h1 {
+  background: linear-gradient(90deg, #0038b8, #00267d) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+body.independence .clock {
+  color: #0038b8 !important;
+  font-weight: bold;
+}
+
+body.independence .ticker {
+  background: #0038b8 !important;
+}
+body.independence .ticker-label {
+  background: #ffffff !important;
+  color: #0038b8 !important;
+}
+
 
 body.purim{
   background:
