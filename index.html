@@ -304,6 +304,50 @@ body.shabbat .clock {
   color: #EEE8AA !important; 
 }
 
+/* ====== עיצוב יום הזיכרון: יזכור ====== */
+body.memorial {
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+    url('https://images.unsplash.com/photo-1512413333333-e9102c42284e?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed !important;
+  background-size: cover !important;
+  color: #d1d1d1 !important;
+}
+
+/* כיתוב יזכור גדול ומרגש ברקע */
+body.memorial::after {
+  content: "יִזְכּוֹר";
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20vw;
+  color: rgba(255, 255, 255, 0.03); /* שקיפות מאוד עדינה */
+  font-weight: bold;
+  z-index: -1;
+  pointer-events: none;
+  letter-spacing: 10px;
+}
+
+/* עיצוב כרטיסיות ביום הזיכרון */
+body.memorial .card {
+  background: rgba(20, 20, 20, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: none !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+/* כותרת ושעון בצבע כסוף-אפור */
+body.memorial h1 {
+  background: linear-gradient(180deg, #ffffff, #888888) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+body.memorial .clock {
+  color: #aaaaaa !important;
+}
+
+
 /* ====== עיצוב יום העצמאות: כחול לבן וחגיגי ====== */
 body.independence {
   background: linear-gradient(135deg, #0038b8 0%, #ffffff 50%, #0038b8 100%) !important;
@@ -729,15 +773,14 @@ setInterval(function() {
 }, 60 * 60 * 1000);
 // --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---
 const ThemeController = {
-  themes: ["shabbat", "purim", "hanukkah", "pesach", "roshhashana", "shavuot", "independence"],
+  themes: ["shabbat", "purim", "hanukkah", "pesach", "roshhashana", "shavuot", "independence", "memorial"], // חדש!
 
-  // רשימת תמונות נוף לימי חול (אפשר להוסיף או לשנות קישורים בעתיד)
   landscapes: [
-    "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=1920&auto=format&fit=crop", // נוף הרים ירוק
-    "https://images.unsplash.com/photo-1506744626753-dba37c2a9815?q=80&w=1920&auto=format&fit=crop", // נוף אגם שקט
-    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1920&auto=format&fit=crop", // הרים וערפל
-    "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920&auto=format&fit=crop", // ים בשקיעה
-    "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1920&auto=format&fit=crop"  // יער וטבע
+    "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=1920&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1506744626753-dba37c2a9815?q=80&w=1920&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1920&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1920&auto=format&fit=crop"
   ],
 
   async init() {
@@ -748,29 +791,19 @@ const ThemeController = {
   async applyCurrentTheme() {
     const now = new Date();
     const day = now.getDay(); 
-
-    // 1. איפוס כל העיצובים והרקעים כדי שנוכל להתחיל מדף חלק
     document.body.classList.remove(...this.themes);
     document.body.style.background = ""; 
 
-    // 2. בדיקת שבת
     if (day === 5 || day === 6) {
       document.body.classList.add("shabbat");
       return; 
     }
 
-    // 3. בדיקת חגים
     await this.applyHolidayTheme(now);
 
-    // 4. בדיקה: האם הופעל עיצוב של שבת או חג?
     const hasTheme = this.themes.some(t => document.body.classList.contains(t));
-    
-    // אם לא הופעל שום חג (זה יום חול רגיל) - שמים תמונת נוף!
     if (!hasTheme) {
-      // הגרלת תמונה אקראית מתוך הרשימה
       const randomImg = this.landscapes[Math.floor(Math.random() * this.landscapes.length)];
-      
-      // הוספת התמונה לרקע עם שכבת הכהיה (כדי שהטקסט הלבן יבלוט)
       document.body.style.background = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${randomImg}') no-repeat center center fixed`;
       document.body.style.backgroundSize = "cover";
     }
@@ -794,14 +827,13 @@ const ThemeController = {
         else if (title.includes("rosh hashana")) document.body.classList.add("roshhashana");
         else if (title.includes("shavuot")) document.body.classList.add("shavuot");
         else if (title.includes("yom ha'atzmaut")) document.body.classList.add("independence");
+        else if (title.includes("yom hazikaron")) document.body.classList.add("memorial"); // חדש!
       }
     } catch (error) {
       console.log("שגיאה בטעינת עיצוב חגים:", error);
     }
   }
 };
-
-// הפעלת המערכת כשהאתר עולה
 ThemeController.init();
 
 </script>
