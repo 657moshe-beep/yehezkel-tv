@@ -836,6 +836,29 @@ const ThemeController = {
 };
 ThemeController.init();
 
+// --- החלפת כותרת חכמה לפי ימים ---
+function updateGreeting() {
+  const title = document.querySelector('h1');
+  if (!title) return;
+
+  const day = new Date().getDay(); // 0=ראשון, 5=שישי, 6=שבת
+
+  if (day === 0) {
+    title.innerText = "שבוע טוב!";
+  } else if (day === 5 || day === 6) {
+    title.innerText = "שבת שלום!";
+  } else {
+    // בכל שאר ימי החול (שני עד חמישי)
+    title.innerText = "יחזקאל 7";
+  }
+}
+
+// הפעלת הפונקציה
+updateGreeting();
+// עדכון אוטומטי כל שעה למקרה שהמסך דולק כשהיום מתחלף בחצות
+setInterval(updateGreeting, 60 * 60 * 1000);
+
+
 </script>
 </body>
 </html>
