@@ -17,58 +17,72 @@
 }
 
 *{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,Segoe UI;
+body {
+  margin: 0;
+  color: #fff;
+  font-family: system-ui, -apple-system, Segoe UI;
   background:
-    radial-gradient(circle at 20% 20%, rgba(124,58,237,.25), transparent 40%),
-    radial-gradient(circle at 80% 10%, rgba(34,211,238,.25), transparent 40%),
+    radial-gradient(circle at 20% 20%, rgba(124, 58, 237, 0.15), transparent 40%),
+    radial-gradient(circle at 80% 10%, rgba(34, 211, 238, 0.15), transparent 40%),
     var(--bg);
-  color:var(--text);
-  overflow:hidden;
+  /* השינויים החשובים לטלוויזיה: */
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:30px 50px;
-  border-bottom:1px solid var(--stroke);
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 40px 60px;
+  border-bottom: 1px solid var(--stroke);
 }
 
-h1{
-  font-size:48px;
-  margin:0;
-  background:linear-gradient(90deg,var(--accent1),var(--accent2));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+
+h1 {
+  font-size: 5vw; 
+  margin: 0;
+  line-height: 1.1;
+  max-width: 60%;
+  background: linear-gradient(90deg, var(--accent1), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.clock{
-  font-size:32px;
-  color:var(--muted);
+.clock {
+  text-align: left;
+  font-size: 2vw; 
+  color: rgba(255, 255, 255, 0.8);
+  white-space: pre-wrap;
 }
 
-main{
-  display:grid;
-  grid-template-columns: 60% 40%;
-  gap:30px;
-  padding:40px;
-}
-body{
-  padding-bottom:120px;
+
+main {
+  flex: 1; 
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  gap: 60px; 
+  padding: 40px;
 }
 
-.card{
-  background:var(--glass);
-  border:1px solid var(--stroke);
-  border-radius:20px;
-  padding:30px;
-  backdrop-filter:blur(20px);
-}
-/* תן לכל הכרטיסים גובה מינימלי יפה */
-.card{
-  min-height: 420px;
+.card {
+  background: var(--glass);
+  backdrop-filter: blur(20px);
+  border-radius: 30px; 
+  padding: 50px; 
+  border: 1px solid var(--stroke);
+  
+  /* רוחב מותאם לטלוויזיה */
+  width: 45vw;
+  min-width: 600px; 
+  min-height: 500px; 
+  
+  display: flex;
+  flex-direction: column;
 }
 
 
