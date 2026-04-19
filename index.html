@@ -457,6 +457,44 @@ body.independence{
     linear-gradient(180deg,#1e3a8a,#0f172a) !important;
 }
 
+/* ====== התאמה למסכים קטנים (טלפונים) ====== */
+@media (max-width: 800px) {
+  body {
+    overflow: auto; 
+  }
+  
+  header {
+    flex-direction: column; 
+    align-items: center;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  h1 {
+    font-size: 40px; 
+    max-width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .clock {
+    text-align: center;
+    font-size: 22px;
+  }
+  
+  main, .grid {
+    flex-direction: column; 
+    gap: 20px;
+    padding: 15px;
+  }
+  
+  .card {
+    width: 90%; 
+    min-width: 0; 
+    min-height: auto;
+    padding: 25px;
+  }
+}
+
 </style></head>
 
 <body>
