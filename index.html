@@ -824,6 +824,7 @@ setInterval(function() {
   location.reload();
 }, 60 * 60 * 1000);
 // --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---
+// --- מנהל העיצובים של יחזקאל 7 ---
 const ThemeController = {
   themes: ["shabbat", "purim", "hanukkah", "pesach", "roshhashana", "shavuot", "independence", "memorial"],
 
@@ -868,9 +869,10 @@ const ThemeController = {
       
       const data = await res.json();
       
+      // התיקון שלנו: בדיקה אם עכשיו אחרי השקיעה (18:00) אז אנחנו מחשיבים את זה כמחר
       let dateToCheck = new Date(now);
       if (dateToCheck.getHours() >= 18) {
-        dateToCheck.setDate(dateToCheck.getDate() + 1);
+        dateToCheck.setDate(dateToCheck.getDate() + 1); 
       }
 
       const todayStr = dateToCheck.toLocaleDateString('en-CA'); 
