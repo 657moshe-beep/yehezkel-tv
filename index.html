@@ -846,18 +846,22 @@ setInterval(loadNews, 10 * 60 * 1000);
 setInterval(function() {
   location.reload();
 }, 60 * 60 * 1000);
-// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---
-// --- מנהל העיצובים של יחזקאל 7 ---const ThemeController = {
+// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---
+const ThemeController = {
   themes: ["shabbat", "purim", "hanukkah", "pesach", "roshhashana", "shavuot", "independence", "memorial"],
   landscapes: [
     "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=1920&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1506744626753-dba37c2a9815?q=80&w=1920&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1920&auto=format&fit=crop"
+    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=1920&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1920&auto=format&fit=crop"
   ],
+  
   async init() {
     await this.applyCurrentTheme();
     setInterval(() => this.applyCurrentTheme(), 60 * 60 * 1000);
   },
+  
   async applyCurrentTheme() {
     const now = new Date();
     document.body.classList.remove(...this.themes);
@@ -879,45 +883,45 @@ setInterval(function() {
     // מעדכן את הכותרת מיד אחרי שהעיצוב נקבע
     updateGreeting(); 
   },
+  
   async applyHolidayTheme(now) {
     try {
       const res = await fetch('https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&year=now&month=now&ss=on&mf=on&c=off&geo=pos');
       const data = await res.json();
+      
       let dateToCheck = new Date(now);
       if (dateToCheck.getHours() >= 18) dateToCheck.setDate(dateToCheck.getDate() + 1);
       const todayStr = dateToCheck.toLocaleDateString('en-CA'); 
-      const todayEvent = data.items.find(item => item.date === todayStr);
-      if (todayEvent) {
-        const title = todayEvent.title.toLowerCase();
+      
+      // התיקון הקריטי: עוברים על כל האירועים שיש היום, ולא רק על הראשון (שבמקרה היה העומר)
+      const todayEvents = data.items.filter(item => item.date === todayStr);
+      
+      for (let event of todayEvents) {
+        const title = event.title.toLowerCase();
         if (title.includes("yom hazikaron")) document.body.classList.add("memorial");
         else if (title.includes("yom ha'atzmaut")) document.body.classList.add("independence");
         else if (title.includes("purim")) document.body.classList.add("purim");
         else if (title.includes("chanukah")) document.body.classList.add("hanukkah");
         else if (title.includes("pesach") || title.includes("passover")) document.body.classList.add("pesach");
+        else if (title.includes("rosh hashana")) document.body.classList.add("roshhashana");
+        else if (title.includes("shavuot")) document.body.classList.add("shavuot");
       }
     } catch (e) { console.log(e); }
   }
 };
+
 ThemeController.init();
 
-
-
-
-
-// --- החלפת כותרת חכמה לפי ימים ---
+// --- מערכת כותרות חכמה ---
 function updateGreeting() {
   const title = document.querySelector('h1');
   if (!title) return;
 
-  // בדיקה אם עיצוב יום הזיכרון פעיל
   if (document.body.classList.contains("memorial")) {
     title.innerText = "יִזְכּוֹר";
-  } 
-  // בדיקה אם עיצוב יום העצמאות פעיל (ליום רביעי)
-  else if (document.body.classList.contains("independence")) {
+  } else if (document.body.classList.contains("independence")) {
     title.innerText = "חג עצמאות שמח!";
-  }
-  else {
+  } else {
     const day = new Date().getDay();
     if (day === 0) {
       title.innerText = "שבוע טוב ומבורך!";
@@ -928,12 +932,7 @@ function updateGreeting() {
     }
   }
 }
-
-
-// הפעלת הפונקציה
-updateGreeting();
-// עדכון אוטומטי כל שעה למקרה שהמסך דולק כשהיום מתחלף בחצות
-setInterval(updateGreeting, 60 * 60 * 1000);
+  ף* 1000);
 
 
 </script>
