@@ -823,9 +823,9 @@ setInterval(loadNews, 10 * 60 * 1000);
 setInterval(function() {
   location.reload();
 }, 60 * 60 * 1000);
-// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---
+// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---
 const ThemeController = {
-  themes: ["shabbat", "purim", "hanukkah", "pesach", "roshhashana", "shavuot", "independence", "memorial"], // חדש!
+  themes: ["shabbat", "purim", "hanukkah", "pesach", "roshhashana", "shavuot", "independence", "memorial"],
 
   landscapes: [
     "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=1920&auto=format&fit=crop",
@@ -867,7 +867,14 @@ const ThemeController = {
       if (!res.ok) return;
       
       const data = await res.json();
-      const todayStr = now.toLocaleDateString('en-CA'); 
+      
+      // התיקון: בדיקה אם אנחנו אחרי השקיעה (18:00)
+      let dateToCheck = new Date(now);
+      if (dateToCheck.getHours() >= 18) {
+        dateToCheck.setDate(dateToCheck.getDate() + 1); 
+      }
+
+      const todayStr = dateToCheck.toLocaleDateString('en-CA'); 
       const todayEvent = data.items.find(item => item.date === todayStr);
 
       if (todayEvent) {
@@ -879,7 +886,7 @@ const ThemeController = {
         else if (title.includes("rosh hashana")) document.body.classList.add("roshhashana");
         else if (title.includes("shavuot")) document.body.classList.add("shavuot");
         else if (title.includes("yom ha'atzmaut")) document.body.classList.add("independence");
-        else if (title.includes("yom hazikaron")) document.body.classList.add("memorial"); // חדש!
+        else if (title.includes("yom hazikaron")) document.body.classList.add("memorial");
       }
     } catch (error) {
       console.log("שגיאה בטעינת עיצוב חגים:", error);
@@ -887,6 +894,7 @@ const ThemeController = {
   }
 };
 ThemeController.init();
+
 
 // --- החלפת כותרת חכמה לפי ימים ---
 function updateGreeting() {
