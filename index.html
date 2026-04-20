@@ -928,17 +928,26 @@ function updateGreeting() {
   const title = document.querySelector('h1');
   if (!title) return;
 
-  const day = new Date().getDay(); // 0=ראשון, 5=שישי, 6=שבת
-
-  if (day === 0) {
-    title.innerText = "שבוע טוב ומבורך!";
-  } else if (day === 5 || day === 6) {
-    title.innerText = "שבת שלום!";
-  } else {
-    // בכל שאר ימי החול (שני עד חמישי)
-    title.innerText = "יחזקאל 7";
+  // בדיקה אם עיצוב יום הזיכרון פעיל
+  if (document.body.classList.contains("memorial")) {
+    title.innerText = "יִזְכּוֹר";
+  } 
+  // בדיקה אם עיצוב יום העצמאות פעיל (ליום רביעי)
+  else if (document.body.classList.contains("independence")) {
+    title.innerText = "חג עצמאות שמח!";
+  }
+  else {
+    const day = new Date().getDay();
+    if (day === 0) {
+      title.innerText = "שבוע טוב ומבורך!";
+    } else if (day === 5 || day === 6) {
+      title.innerText = "שבת שלום!";
+    } else {
+      title.innerText = "יחזקאל 7";
+    }
   }
 }
+
 
 // הפעלת הפונקציה
 updateGreeting();
