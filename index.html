@@ -495,6 +495,29 @@ body.independence{
   }
 }
 
+/* ====== עיצוב יום הזיכרון ====== */
+body.memorial {
+  background: 
+    linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), 
+    url('https://images.unsplash.com/photo-1512413333333-e9102c42284e?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed !important;
+  background-size: cover !important;
+}
+
+body.memorial::after {
+  content: "יִזְכּוֹר";
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 20vw;
+  color: rgba(255, 255, 255, 0.04);
+  font-weight: bold;
+  z-index: -1;
+  pointer-events: none;
+  letter-spacing: 10px;
+}
+
+
 </style></head>
 
 <body>
