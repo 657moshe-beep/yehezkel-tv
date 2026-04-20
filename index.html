@@ -846,9 +846,8 @@ setInterval(loadNews, 10 * 60 * 1000);
 setInterval(function() {
   location.reload();
 }, 60 * 60 * 1000);
-// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---
+// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים (גרסה בטוחה ויציבה לימי זיכרון ועצמאות) ---
 const ThemeController = {
-  themes: ["shabbat", "purim", "hanukkah", "pesach", "roshhashana", "shavuot", "independence", "memorial"],
   landscapes: [
     "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=1920&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1506744626753-dba37c2a9815?q=80&w=1920&auto=format&fit=crop",
@@ -857,62 +856,46 @@ const ThemeController = {
     "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1920&auto=format&fit=crop"
   ],
   
-  async init() {
-    await this.applyCurrentTheme();
-    setInterval(() => this.applyCurrentTheme(), 60 * 60 * 1000);
+  init() {
+    this.applyTheme();
+    setInterval(() => this.applyTheme(), 60 * 60 * 1000);
   },
   
-  async applyCurrentTheme() {
+  applyTheme() {
     const now = new Date();
-    document.body.classList.remove(...this.themes);
-    document.body.style.background = ""; 
+    const month = now.getMonth() + 1;
+    const date = now.getDate();
+    const hours = now.getHours();
+    const day = now.getDay();
 
-    if (now.getDay() === 5 || now.getDay() === 6) {
+    document.body.className = ""; 
+    
+    // יום הזיכרון: 20 באפריל מ-18:00 עד 21 באפריל ב-18:00
+    const isMemorial = (month === 4 && date === 20 && hours >= 18) || (month === 4 && date === 21 && hours < 18);
+    // יום העצמאות: 21 באפריל מ-18:00 עד 22 באפריל ב-18:00
+    const isIndependence = (month === 4 && date === 21 && hours >= 18) || (month === 4 && date === 22 && hours < 18);
+
+    if (isMemorial) {
+      document.body.classList.add("memorial");
+      document.body.style.background = "";
+    } else if (isIndependence) {
+      document.body.classList.add("independence");
+      document.body.style.background = "";
+    } else if (day === 5 || day === 6) {
       document.body.classList.add("shabbat");
+      document.body.style.background = "";
     } else {
-      await this.applyHolidayTheme(now);
-    }
-
-    const hasTheme = this.themes.some(t => document.body.classList.contains(t));
-    if (!hasTheme) {
       const randomImg = this.landscapes[Math.floor(Math.random() * this.landscapes.length)];
       document.body.style.background = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${randomImg}') no-repeat center center fixed`;
       document.body.style.backgroundSize = "cover";
     }
     
-    // מעדכן את הכותרת מיד אחרי שהעיצוב נקבע
-    updateGreeting(); 
-  },
-  
-  async applyHolidayTheme(now) {
-    try {
-      const res = await fetch('https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&year=now&month=now&ss=on&mf=on&c=off&geo=pos');
-      const data = await res.json();
-      
-      let dateToCheck = new Date(now);
-      if (dateToCheck.getHours() >= 18) dateToCheck.setDate(dateToCheck.getDate() + 1);
-      const todayStr = dateToCheck.toLocaleDateString('en-CA'); 
-      
-      // התיקון הקריטי: עוברים על כל האירועים שיש היום, ולא רק על הראשון (שבמקרה היה העומר)
-      const todayEvents = data.items.filter(item => item.date === todayStr);
-      
-      for (let event of todayEvents) {
-        const title = event.title.toLowerCase();
-        if (title.includes("yom hazikaron")) document.body.classList.add("memorial");
-        else if (title.includes("yom ha'atzmaut")) document.body.classList.add("independence");
-        else if (title.includes("purim")) document.body.classList.add("purim");
-        else if (title.includes("chanukah")) document.body.classList.add("hanukkah");
-        else if (title.includes("pesach") || title.includes("passover")) document.body.classList.add("pesach");
-        else if (title.includes("rosh hashana")) document.body.classList.add("roshhashana");
-        else if (title.includes("shavuot")) document.body.classList.add("shavuot");
-      }
-    } catch (e) { console.log(e); }
+    updateGreeting();
   }
 };
-
 ThemeController.init();
 
-// --- מערכת כותרות חכמה ---
+// --- כותרת חכמה ---
 function updateGreeting() {
   const title = document.querySelector('h1');
   if (!title) return;
@@ -932,7 +915,7 @@ function updateGreeting() {
     }
   }
 }
-  ף* 1000);
+
 
 
 </script>
