@@ -846,8 +846,9 @@ setInterval(loadNews, 10 * 60 * 1000);
 setInterval(function() {
   location.reload();
 }, 60 * 60 * 1000);
-// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים (גרסה בטוחה ויציבה לימי זיכרון ועצמאות) ---
+// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים של יחזקאל 7 ---// --- מנהל העיצובים (גרסה בטוחה ויציבה לימי זיכרון ועצמאות) ---// --- מנהל העיצובים והחגים של יחזקאל 7 ---
 const ThemeController = {
+  // תמונות הנוף הרגילות לימי חול
   landscapes: [
     "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?q=80&w=1920&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1506744626753-dba37c2a9815?q=80&w=1920&auto=format&fit=crop",
@@ -855,66 +856,90 @@ const ThemeController = {
     "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1920&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1426604966848-d7adac402bff?q=80&w=1920&auto=format&fit=crop"
   ],
-  
-  init() {
-    this.applyTheme();
-    setInterval(() => this.applyTheme(), 60 * 60 * 1000);
-  },
-  
-  applyTheme() {
-    const now = new Date();
-    const month = now.getMonth() + 1;
-    const date = now.getDate();
-    const hours = now.getHours();
-    const day = now.getDay();
 
+  // המילון שלנו: הגדרות לכל חג (טקסט לכותרת + תמונת רקע מתאימה)
+  holidayData: {
+    "shavuot": { text: "חג שבועות שמח!", bg: "https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d?q=80&w=1920&auto=format&fit=crop" }, // תמונת שיבולי חיטה וטבע
+    "rosh hashana": { text: "שנה טובה ומתוקה!", bg: "https://images.unsplash.com/photo-1601002360551-7ce325e648c0?q=80&w=1920&auto=format&fit=crop" }, // דבש, תפוחים ואווירת חג
+    "yom kippur": { text: "גמר חתימה טובה", bg: "https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?q=80&w=1920&auto=format&fit=crop" }, // אווירה שמימית ורגועה
+    "sukkot": { text: "חג סוכות שמח!", bg: "https://images.unsplash.com/photo-1508688407886-07e0dfd65db4?q=80&w=1920&auto=format&fit=crop" }, // סכך וטבע
+    "chanukah": { text: "חג חנוכה שמח!", bg: "https://images.unsplash.com/photo-1606041011872-59659ceb7230?q=80&w=1920&auto=format&fit=crop" }, // חנוכיה ואור
+    "purim": { text: "חג פורים שמח!", bg: "https://images.unsplash.com/photo-1520697960359-86eb49d41935?q=80&w=1920&auto=format&fit=crop" }, // אווירה צבעונית
+    "pesach": { text: "חג פסח שמח וכשר!", bg: "https://images.unsplash.com/photo-1616885338144-88db09a3637e?q=80&w=1920&auto=format&fit=crop" } // שולחן חג/אביב
+  },
+
+  async init() {
+    await this.applyTheme();
+    // בודק ומרענן כל שעה עגולה
+    setInterval(() => this.applyTheme(), 60 * 60 * 1000); 
+  },
+
+  async applyTheme() {
+    const now = new Date();
+    const day = now.getDay();
+    const titleEl = document.querySelector('h1');
+    
+    // 1. נבדוק אם יש חג היום בלוח העברי
+    let activeHoliday = null;
+    try {
+      const res = await fetch('https://www.hebcal.com/hebcal?v=1&cfg=json&maj=on&min=on&mod=on&nx=on&year=now&month=now&ss=on&mf=on&c=off&geo=pos');
+      const data = await res.json();
+      
+      // אם עברנו את 18:00 בערב, אנחנו בודקים את החג של מחר
+      let dateToCheck = new Date(now);
+      if (dateToCheck.getHours() >= 18) dateToCheck.setDate(dateToCheck.getDate() + 1);
+      const todayStr = dateToCheck.toLocaleDateString('en-CA'); 
+      
+      // מביא את כל האירועים של היום
+      const todayEvents = data.items.filter(item => item.date === todayStr);
+      
+      for (let event of todayEvents) {
+        const title = event.title.toLowerCase();
+        // מחפש התאמה בין האירוע למילון החגים שלנו
+        for (let holidayKey in this.holidayData) {
+          if (title.includes(holidayKey)) {
+            activeHoliday = this.holidayData[holidayKey];
+            break;
+          }
+        }
+        if (activeHoliday) break;
+      }
+    } catch (e) { 
+      console.log("שגיאה בחיפוש חג, נטען עיצוב רגיל"); 
+    }
+
+    // 2. מחילים את העיצוב (חג / שבת / יום חול)
     document.body.className = ""; 
     
-    // יום הזיכרון: 20 באפריל מ-18:00 עד 21 באפריל ב-18:00
-    const isMemorial = (month === 4 && date === 20 && hours >= 18) || (month === 4 && date === 21 && hours < 18);
-    // יום העצמאות: 21 באפריל מ-18:00 עד 22 באפריל ב-18:00
-    const isIndependence = (month === 4 && date === 21 && hours >= 18) || (month === 4 && date === 22 && hours < 18);
-
-    if (isMemorial) {
-      document.body.classList.add("memorial");
-      document.body.style.background = "";
-    } else if (isIndependence) {
-      document.body.classList.add("independence");
-      document.body.style.background = "";
-    } else if (day === 5 || day === 6) {
+    if (activeHoliday) {
+      // --- מצב חג ---
+      titleEl.innerText = activeHoliday.text;
+      document.body.style.background = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${activeHoliday.bg}') no-repeat center center fixed`;
+      document.body.style.backgroundSize = "cover";
+    } 
+    else if (day === 5 || day === 6) {
+      // --- מצב שבת ---
       document.body.classList.add("shabbat");
-      document.body.style.background = "";
-    } else {
+      document.body.style.background = ""; 
+      titleEl.innerText = "שבת שלום!";
+    } 
+    else {
+      // --- מצב יום חול ---
       const randomImg = this.landscapes[Math.floor(Math.random() * this.landscapes.length)];
       document.body.style.background = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${randomImg}') no-repeat center center fixed`;
       document.body.style.backgroundSize = "cover";
+      
+      if (day === 0) {
+        titleEl.innerText = "שבוע טוב ומבורך!";
+      } else {
+        titleEl.innerText = "יחזקאל 7";
+      }
     }
-    
-    updateGreeting();
   }
 };
+
 ThemeController.init();
 
-// --- כותרת חכמה ---
-function updateGreeting() {
-  const title = document.querySelector('h1');
-  if (!title) return;
-
-  if (document.body.classList.contains("memorial")) {
-    title.innerText = "יִזְכּוֹר";
-  } else if (document.body.classList.contains("independence")) {
-    title.innerText = "חג עצמאות שמח!";
-  } else {
-    const day = new Date().getDay();
-    if (day === 0) {
-      title.innerText = "שבוע טוב ומבורך!";
-    } else if (day === 5 || day === 6) {
-      title.innerText = "שבת שלום!";
-    } else {
-      title.innerText = "יחזקאל 7";
-    }
-  }
-}
 
 
 
