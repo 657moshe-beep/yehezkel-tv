@@ -882,6 +882,17 @@ const ThemeController = {
     const day = now.getDay();
     const titleEl = document.querySelector('h1');
     
+        const month = now.getMonth() + 1;
+    const dateNum = now.getDate();
+    if ((month === 6 && dateNum === 30) || (month === 7 && dateNum <= 2)) {
+      document.body.className = ""; 
+      titleEl.innerText = "חופשה נעימה לילדי, מורי וסייעות יחזקאל 7! ☀️🌊";
+      document.body.style.background = "url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed";
+      document.body.style.backgroundSize = "cover";
+      return; 
+    }
+
+    
     // 1. נבדוק אם יש חג היום בלוח העברי
     let activeHoliday = null;
     try {
