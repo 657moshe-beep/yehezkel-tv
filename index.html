@@ -882,15 +882,32 @@ const ThemeController = {
     const day = now.getDay();
     const titleEl = document.querySelector('h1');
     
-        const month = now.getMonth() + 1;
+            const month = now.getMonth() + 1;
     const dateNum = now.getDate();
     if ((month === 6 && dateNum === 30) || (month === 7 && dateNum <= 2)) {
       document.body.className = ""; 
       titleEl.innerText = "חופשה נעימה לילדי, מורי וסייעות יחזקאל 7! ☀️🌊";
       document.body.style.background = "url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed";
       document.body.style.backgroundSize = "cover";
+      
+      // הוספת אפקט פעימה וזוהר קיצי לכותרת
+      titleEl.style.animation = "summerGlow 2.5s infinite alternate ease-in-out";
+      titleEl.style.display = "inline-block";
+      
+      if (!document.getElementById("summer-style")) {
+        const style = document.createElement("style");
+        style.id = "summer-style";
+        style.innerHTML = `
+          @keyframes summerGlow {
+            0% { transform: scale(1); text-shadow: 0 0 10px rgba(255,255,255,0.6); }
+            100% { transform: scale(1.03); text-shadow: 0 0 20px #ffeb3b, 0 0 30px #ff9800; }
+          }
+        `;
+        document.head.appendChild(style);
+      }
       return; 
     }
+
 
     
     // 1. נבדוק אם יש חג היום בלוח העברי
