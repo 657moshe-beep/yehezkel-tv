@@ -935,6 +935,31 @@ const ThemeController = {
       return; 
     }
 
+    // --- תזמון מיוחד לחזרה ללימודים (1-2 בספטמבר) ---
+    if (month === 9 && dateNum <= 2) {
+      document.body.className = ""; 
+      titleEl.innerText = "חזרה ללימודים נעימה ומוצלחת לכל תלמידי ומורי יחזקאל 7! 🎒📚🍎";
+      const schoolBg = "https://upload.wikimedia.org/wikipedia/commons/b/b1/Colouring_pencils.jpg";
+      document.body.style.background = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${schoolBg}') no-repeat center center fixed`;
+      document.body.style.backgroundSize = "cover";
+      
+      titleEl.style.animation = "schoolGlow 2.5s infinite alternate ease-in-out";
+      titleEl.style.display = "inline-block";
+      
+      if (!document.getElementById("school-style")) {
+        const style = document.createElement("style");
+        style.id = "school-style";
+        style.innerHTML = `
+          @keyframes schoolGlow {
+            0% { transform: scale(1); text-shadow: 0 0 10px rgba(255,255,255,0.6); }
+            100% { transform: scale(1.03); text-shadow: 0 0 20px #ffeb3b, 0 0 30px #ff9800; }
+          }
+        `;
+        document.head.appendChild(style);
+      }
+      return; 
+    }
+
 
     
     // 1. נבדוק אם יש חג היום בלוח העברי
