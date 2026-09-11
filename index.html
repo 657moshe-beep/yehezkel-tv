@@ -517,6 +517,208 @@ body.memorial::after {
   letter-spacing: 10px;
 }
 
+/* ====== ראש השנה: מסך חגיגי לטלוויזיית הלובי ====== */
+.holiday-greeting {
+  display: none;
+}
+
+body.roshhashana {
+  background:
+    linear-gradient(115deg, rgba(20, 8, 4, .94) 0%, rgba(61, 18, 8, .75) 45%, rgba(10, 31, 21, .86) 100%),
+    url('rosh-hashana-bg.webp') no-repeat center center fixed !important;
+  background-size: cover !important;
+  color: #fff8df;
+}
+
+body.roshhashana header {
+  align-items: center;
+  padding: 24px 54px;
+  background: linear-gradient(90deg, rgba(29, 8, 4, .66), rgba(12, 34, 23, .60));
+  border-bottom: 1px solid rgba(255, 224, 143, .30);
+  box-shadow: 0 16px 42px rgba(0, 0, 0, .22);
+}
+
+body.roshhashana h1 {
+  max-width: 70%;
+  font-size: clamp(42px, 4.1vw, 78px);
+  background: linear-gradient(90deg, #fff6c7, #f4c85f 55%, #fff0ae) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  filter: drop-shadow(0 5px 16px rgba(0, 0, 0, .35));
+}
+
+body.roshhashana .clock {
+  color: #fff0b5;
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+body.roshhashana main {
+  transform: none;
+  flex: 1;
+  align-items: stretch;
+  justify-content: center;
+  gap: 18px;
+  padding: 24px 46px 20px;
+  min-height: 0;
+}
+
+body.roshhashana .holiday-greeting {
+  position: relative;
+  display: flex;
+  flex: 1.6 1 0;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 34px 40px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 224, 143, .44);
+  border-radius: 34px;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255, 226, 139, .16), transparent 42%),
+    linear-gradient(145deg, rgba(87, 22, 8, .74), rgba(15, 55, 36, .76));
+  box-shadow: 0 24px 80px rgba(0, 0, 0, .38), inset 0 1px 0 rgba(255, 255, 255, .12);
+  backdrop-filter: blur(16px);
+}
+
+.holiday-symbols {
+  font-size: clamp(34px, 3vw, 58px);
+  letter-spacing: .18em;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, .3));
+}
+
+.holiday-kicker {
+  margin-top: 14px;
+  color: #f7d77f;
+  font-size: clamp(18px, 1.35vw, 27px);
+  font-weight: 800;
+  letter-spacing: .08em;
+}
+
+.holiday-title {
+  margin: 6px 0 8px;
+  color: #fff9e8;
+  font-size: clamp(54px, 5.2vw, 96px);
+  font-weight: 900;
+  line-height: 1.03;
+  text-shadow: 0 8px 32px rgba(0, 0, 0, .36);
+}
+
+.holiday-subtitle {
+  color: #fff2c5;
+  font-size: clamp(24px, 2vw, 38px);
+  font-weight: 650;
+}
+
+.holiday-wishes {
+  margin-top: 24px;
+  padding: 13px 24px;
+  border-top: 1px solid rgba(255, 226, 139, .35);
+  border-bottom: 1px solid rgba(255, 226, 139, .35);
+  color: #fff9e5;
+  font-size: clamp(17px, 1.25vw, 25px);
+  font-weight: 700;
+}
+
+.holiday-date {
+  margin-top: 15px;
+  color: rgba(255, 244, 205, .76);
+  font-size: clamp(15px, 1.05vw, 21px);
+}
+
+body.roshhashana .card {
+  flex: 1 1 0;
+  width: auto;
+  min-width: 0;
+  min-height: 0;
+  padding: 28px;
+  border: 1px solid rgba(255, 224, 143, .30);
+  border-radius: 28px;
+  background: rgba(23, 18, 10, .54);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, .26);
+  backdrop-filter: blur(16px);
+}
+
+body.roshhashana .card h2 {
+  margin-bottom: 18px;
+  color: #f4ce72;
+  font-size: clamp(24px, 1.8vw, 32px);
+}
+
+body.roshhashana .card > div[style] {
+  font-size: clamp(25px, 2.05vw, 36px) !important;
+  line-height: 1.45 !important;
+}
+
+body.roshhashana .weather-temp {
+  color: #fff6d4;
+  font-size: clamp(48px, 4vw, 72px);
+}
+
+body.roshhashana .weather-desc {
+  color: #f7e7b5;
+  font-size: clamp(21px, 1.7vw, 29px);
+}
+
+body.roshhashana .day {
+  min-width: 82px;
+  border-color: rgba(255, 224, 143, .24);
+  background: rgba(255, 246, 211, .07);
+  font-size: 18px;
+}
+
+body.roshhashana .day .d,
+body.roshhashana .day .deg {
+  font-size: 20px;
+}
+
+body.roshhashana .daily .day:nth-child(n+4) {
+  display: none;
+}
+
+body.roshhashana .ticker {
+  height: 82px;
+  background: rgba(20, 8, 4, .92);
+  border-top: 1px solid rgba(255, 224, 143, .28);
+}
+
+body.roshhashana .ticker-label {
+  background: linear-gradient(135deg, #d7a635, #f7d776);
+  color: #3b170a;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  body.roshhashana .holiday-symbols {
+    animation: holidayFloat 3.4s ease-in-out infinite alternate;
+  }
+
+  @keyframes holidayFloat {
+    from { transform: translateY(0); }
+    to { transform: translateY(-7px); }
+  }
+}
+
+@media (max-width: 1100px) {
+  body.roshhashana {
+    overflow: auto;
+  }
+
+  body.roshhashana main {
+    flex-wrap: wrap;
+  }
+
+  body.roshhashana .holiday-greeting {
+    flex-basis: 100%;
+    min-height: 390px;
+  }
+
+  body.roshhashana .card {
+    flex-basis: 44%;
+  }
+}
+
 
 </style></head>
 
@@ -528,6 +730,14 @@ body.memorial::after {
 </header>
 
 <main>
+ <section class="holiday-greeting" id="holidayGreeting" aria-label="ברכת ראש השנה">
+  <div class="holiday-symbols" aria-hidden="true">🍎 🍯 🍷</div>
+  <div class="holiday-kicker">ראש השנה תשפ״ז · יחזקאל 7</div>
+  <div class="holiday-title">שנה טובה ומתוקה</div>
+  <div class="holiday-subtitle">לכל דיירות ודיירי הבניין</div>
+  <div class="holiday-wishes">בריאות טובה · בשורות משמחות · שכנות נעימה</div>
+  <div class="holiday-date">א׳–ב׳ בתשרי תשפ״ז</div>
+ </section>
  <div class="card">
   <h2>הודעות</h2>
 
@@ -863,7 +1073,7 @@ const ThemeController = {
   // המילון שלנו: הגדרות לכל חג (טקסט לכותרת + תמונת רקע מתאימה)
   holidayData: {
     "shavuot": { text: "חג שבועות שמח!", bg: "https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d?q=80&w=1920&auto=format&fit=crop" }, // תמונת שיבולי חיטה וטבע
-    "rosh hashana": { text: "שנה טובה ומתוקה!", bg: "https://images.unsplash.com/photo-1601002360551-7ce325e648c0?q=80&w=1920&auto=format&fit=crop" }, // דבש, תפוחים ואווירת חג
+    "rosh hashana": { text: "שנה טובה ומתוקה!", className: "roshhashana", bg: "rosh-hashana-bg.webp" },
     "yom kippur": { text: "גמר חתימה טובה", bg: "https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?q=80&w=1920&auto=format&fit=crop" }, // אווירה שמימית ורגועה
     "sukkot": { text: "חג סוכות שמח!", bg: "https://images.unsplash.com/photo-1508688407886-07e0dfd65db4?q=80&w=1920&auto=format&fit=crop" }, // סכך וטבע
     "chanukah": { text: "חג חנוכה שמח!", bg: "https://images.unsplash.com/photo-1606041011872-59659ceb7230?q=80&w=1920&auto=format&fit=crop" }, // חנוכיה ואור
@@ -881,6 +1091,28 @@ const ThemeController = {
     const now = new Date();
     const day = now.getDay();
     const titleEl = document.querySelector('h1');
+
+    // מציג את העיצוב בשבוע שלפני ראש השנה תשפ"ז ועד צאת החג.
+    const israelDateParts = Object.fromEntries(
+      new Intl.DateTimeFormat("en-CA", {
+        timeZone: "Asia/Jerusalem",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      }).formatToParts(now).map(part => [part.type, part.value])
+    );
+    const israelDate = `${israelDateParts.year}-${israelDateParts.month}-${israelDateParts.day}`;
+    const previewRequested = new URLSearchParams(location.search).get("preview") === "rosh-hashana";
+    const roshHashanaWeek = israelDate >= "2026-09-04" && israelDate <= "2026-09-13";
+
+    if (previewRequested || roshHashanaWeek) {
+      const preview = this.holidayData["rosh hashana"];
+      document.body.className = "roshhashana";
+      titleEl.innerText = preview.text;
+      document.body.style.background = `linear-gradient(115deg, rgba(20,8,4,.90), rgba(10,31,21,.82)), url('${preview.bg}') no-repeat center center fixed`;
+      document.body.style.backgroundSize = "cover";
+      return;
+    }
     
             const month = now.getMonth() + 1;
     const dateNum = now.getDate();
@@ -996,6 +1228,7 @@ const ThemeController = {
     
     if (activeHoliday) {
       // --- מצב חג ---
+      if (activeHoliday.className) document.body.classList.add(activeHoliday.className);
       titleEl.innerText = activeHoliday.text;
       document.body.style.background = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${activeHoliday.bg}') no-repeat center center fixed`;
       document.body.style.backgroundSize = "cover";
