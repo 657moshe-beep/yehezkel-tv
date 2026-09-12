@@ -719,10 +719,51 @@ body.roshhashana .ticker-label {
   }
 }
 
+/* ====== יום כיפור: רק שעון דיגיטלי על כל המסך ====== */
+#yomKippurClock {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #f5f2ea;
+  color: #91a892;
+  direction: ltr;
+  font-family: ui-monospace, "SFMono-Regular", "Roboto Mono", "Courier New", monospace;
+  font-size: clamp(5rem, 19vw, 22rem);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .015em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+body.yom-kippur {
+  overflow: hidden !important;
+  background: #f5f2ea !important;
+}
+
+body.yom-kippur #yomKippurClock {
+  display: flex;
+}
+
+#yomKippurCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 
 </style></head>
 
 <body>
+
+<div id="yomKippurClock" aria-label="שעון פרחוני">
+  <canvas id="yomKippurCanvas" width="1600" height="900" role="img" aria-label="שעון ישראל בספרות פרחוניות"></canvas>
+</div>
 
 <header>
   <h1>יחזקאל 7</h1>
@@ -783,6 +824,122 @@ body.roshhashana .ticker-label {
 </div>
   
   <script>
+// מצב יום כיפור: שעון ישראל פרחוני בלבד, ללא חדשות או תאריך.
+function getIsraelDateParts(now, calendar = "gregory") {
+  return Object.fromEntries(
+    new Intl.DateTimeFormat(`en-u-ca-${calendar}`, {
+      timeZone: "Asia/Jerusalem",
+      year: "numeric",
+      month: calendar === "hebrew" ? "long" : "2-digit",
+      day: "numeric",
+      hour: "2-digit",
+      hourCycle: "h23"
+    }).formatToParts(now).map(part => [part.type, part.value])
+  );
+}
+
+function isYomKippurDisplayTime(now = new Date()) {
+  const parts = getIsraelDateParts(now, "hebrew");
+  const day = Number(parts.day);
+  const hour = Number(parts.hour);
+  const isTishri = String(parts.month).toLowerCase().startsWith("tish");
+
+  // מערב יום כיפור ועד אחרי צאת הצום, לפי שעון ישראל.
+  return isTishri && ((day === 9 && hour >= 17) || (day === 10 && hour < 20));
+}
+
+const floralClockMask = document.createElement("canvas");
+floralClockMask.width = 1600;
+floralClockMask.height = 900;
+let lastFloralClockTime = "";
+
+function configureFloralClockText(context) {
+  context.font = "500 430px Arial, sans-serif";
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  context.lineJoin = "round";
+  context.lineWidth = 18;
+}
+
+function drawClockFlower(context, x, y, seed) {
+  const palettes = [["#f2dfd9", "#c59e8e"], ["#eeeee0", "#bca575"], ["#ccd9ca", "#879b7f"], ["#e9d2cc", "#b78d82"]];
+  const palette = palettes[seed % palettes.length];
+  context.save();
+  context.translate(x, y);
+  context.rotate(seed * 0.73);
+  context.fillStyle = "#8ea98e";
+  context.beginPath();
+  context.ellipse(9, 8, 8, 3.5, 0.6, 0, Math.PI * 2);
+  context.fill();
+  context.fillStyle = palette[0];
+  for (let petal = 0; petal < 5; petal++) {
+    context.save();
+    context.rotate(petal * Math.PI * 2 / 5);
+    context.beginPath();
+    context.ellipse(0, -5.4, 4.8, 7.2, 0, 0, Math.PI * 2);
+    context.fill();
+    context.restore();
+  }
+  context.fillStyle = palette[1];
+  context.beginPath();
+  context.arc(0, 0, 3, 0, Math.PI * 2);
+  context.fill();
+  context.restore();
+}
+
+function updateYomKippurClock() {
+  const clock = document.getElementById("yomKippurClock");
+  if (!clock || clock.style.display !== "flex") return;
+
+  const time = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Jerusalem",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  }).format(new Date());
+  if (time === lastFloralClockTime) return;
+  lastFloralClockTime = time;
+
+  const canvas = document.getElementById("yomKippurCanvas");
+  const context = canvas.getContext("2d");
+  const mask = floralClockMask.getContext("2d", { willReadFrequently: true });
+  context.fillStyle = "#f5f2ea";
+  context.fillRect(0, 0, 1600, 900);
+  configureFloralClockText(context);
+  context.fillStyle = "#91a892";
+  context.strokeStyle = "#91a892";
+  context.strokeText(time, 800, 455);
+  context.fillText(time, 800, 455);
+  mask.clearRect(0, 0, 1600, 900);
+  configureFloralClockText(mask);
+  mask.fillStyle = "#fff";
+  mask.strokeStyle = "#fff";
+  mask.strokeText(time, 800, 455);
+  mask.fillText(time, 800, 455);
+  const pixels = mask.getImageData(0, 0, 1600, 900).data;
+  for (let row = 0, y = 245; y < 690; row++, y += 20) {
+    for (let col = 0, x = 210 + (row % 2) * 10; x < 1390; col++, x += 20) {
+      if (pixels[(y * 1600 + x) * 4 + 3] > 180) drawClockFlower(context, x, y, row * 17 + col * 7);
+    }
+  }
+  canvas.setAttribute("aria-label", "שעון פרחוני: " + time + ", לפי שעון ישראל");
+}
+
+function syncYomKippurMode() {
+  const active = isYomKippurDisplayTime();
+  document.body.classList.toggle("yom-kippur", active);
+  document.getElementById("yomKippurClock").style.display = active ? "flex" : "none";
+  if (active) updateYomKippurClock();
+  return active;
+}
+
+syncYomKippurMode();
+setInterval(() => {
+  const wasActive = document.getElementById("yomKippurClock").style.display === "flex";
+  if (!syncYomKippurMode() && wasActive) ThemeController.applyTheme();
+}, 30 * 1000);
+setInterval(updateYomKippurClock, 1000);
+
 // שעון
 function updateClock(){
   const now = new Date();
@@ -1074,7 +1231,6 @@ const ThemeController = {
   holidayData: {
     "shavuot": { text: "חג שבועות שמח!", bg: "https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d?q=80&w=1920&auto=format&fit=crop" }, // תמונת שיבולי חיטה וטבע
     "rosh hashana": { text: "שנה טובה ומתוקה!", className: "roshhashana", bg: "rosh-hashana-bg.webp" },
-    "yom kippur": { text: "גמר חתימה טובה", bg: "https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?q=80&w=1920&auto=format&fit=crop" }, // אווירה שמימית ורגועה
     "sukkot": { text: "חג סוכות שמח!", bg: "https://images.unsplash.com/photo-1508688407886-07e0dfd65db4?q=80&w=1920&auto=format&fit=crop" }, // סכך וטבע
     "chanukah": { text: "חג חנוכה שמח!", bg: "https://images.unsplash.com/photo-1606041011872-59659ceb7230?q=80&w=1920&auto=format&fit=crop" }, // חנוכיה ואור
     "purim": { text: "חג פורים שמח!", bg: "https://images.unsplash.com/photo-1520697960359-86eb49d41935?q=80&w=1920&auto=format&fit=crop" }, // אווירה צבעונית
@@ -1091,6 +1247,8 @@ const ThemeController = {
     const now = new Date();
     const day = now.getDay();
     const titleEl = document.querySelector('h1');
+
+    if (syncYomKippurMode()) return;
 
     // מציג את העיצוב בשבוע שלפני ראש השנה תשפ"ז ועד צאת החג.
     const israelDateParts = Object.fromEntries(
