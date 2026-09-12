@@ -845,7 +845,7 @@ function isYomKippurDisplayTime(now = new Date()) {
   const isTishri = String(parts.month).toLowerCase().startsWith("tish");
 
   // מערב יום כיפור ועד אחרי צאת הצום, לפי שעון ישראל.
-  return isTishri && ((day === 9 && hour >= 17) || (day === 10 && hour < 20));
+  return isTishri && ((day === 9 && hour >= 14) || (day === 10 && hour < 20));
 }
 
 const floralClockMask = document.createElement("canvas");
