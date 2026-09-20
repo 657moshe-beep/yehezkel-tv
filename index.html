@@ -864,9 +864,12 @@ function isYomKippurDisplayTime(now = new Date()) {
   const day = Number(parts.day);
   const hour = Number(parts.hour);
   const isTishri = String(parts.month).toLowerCase().startsWith("tish");
+  const gregorian = getIsraelDateParts(now);
+  const israelDate = `${gregorian.year}-${String(gregorian.month).padStart(2, "0")}-${String(gregorian.day).padStart(2, "0")}`;
 
   // מערב יום כיפור ועד אחרי צאת הצום, לפי שעון ישראל.
-  return isTishri && ((day === 9 && hour >= 14) || (day === 10 && hour < 20));
+  // בשנת תשפ"ז ההפעלה מתחילה מיד, לבקשת ועד הבית; בשנים הבאות מ-14:00.
+  return israelDate === "2026-09-20" || (isTishri && ((day === 9 && hour >= 14) || (day === 10 && hour < 20)));
 }
 
 const floralClockMask = document.createElement("canvas");
