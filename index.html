@@ -295,8 +295,8 @@ body {
 /* ====== עיצוב שבת משודרג: אווירה רגועה ====== */
 body.shabbat {
   background: 
-    linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
-    url('https://images.unsplash.com/photo-1511216335778-7cb8f49fa7a3?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed !important;
+    linear-gradient(115deg, rgba(3, 10, 25, 0.48), rgba(20, 12, 4, 0.34)),
+    url('shabbat-bg.webp') no-repeat center center fixed !important;
   background-size: cover !important;
   color: #FDF5E6 !important; 
 }
@@ -862,6 +862,17 @@ function getIsraelDateParts(now, calendar = "gregory") {
       hourCycle: "h23"
     }).formatToParts(now).map(part => [part.type, part.value])
   );
+}
+
+function isShabbatThemeTime(now = new Date()) {
+  const weekday = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Jerusalem",
+    weekday: "short"
+  }).format(now);
+  const hour = Number(getIsraelDateParts(now).hour);
+
+  // בכל שבוע: משישי בבוקר ועד מוצאי שבת.
+  return (weekday === "Fri" && hour >= 8) || (weekday === "Sat" && hour < 21);
 }
 
 // גיבוי מקומי ואוטומטי לחגים: פועל בכל שנה גם אם שירות לוח השנה אינו זמין.
@@ -1458,7 +1469,7 @@ const ThemeController = {
       document.body.style.background = `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${activeHoliday.bg}') no-repeat center center fixed`;
       document.body.style.backgroundSize = "cover";
     } 
-    else if (day === 5 || day === 6) {
+    else if (isShabbatThemeTime(now)) {
       // --- מצב שבת ---
       document.body.classList.add("shabbat");
       document.body.style.background = ""; 
