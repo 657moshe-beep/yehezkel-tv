@@ -423,33 +423,38 @@ body.independence .ticker-label {
 
 body.purim{
   background:
-    radial-gradient(circle at 20% 20%, rgba(255,215,0,.15), transparent 40%),
-    radial-gradient(circle at 80% 10%, rgba(124,58,237,.25), transparent 45%),
-    var(--bg) !important;
+    linear-gradient(115deg, rgba(28,4,22,.62), rgba(8,20,31,.46)),
+    url('holiday-purim.webp') no-repeat center/cover fixed !important;
 }
 
 body.hanukkah{
   background:
-    radial-gradient(circle at 50% 20%, rgba(255,215,0,.2), transparent 40%),
-    linear-gradient(180deg,#0c2a52,#081428) !important;
+    linear-gradient(115deg, rgba(4,15,37,.62), rgba(4,14,30,.36)),
+    url('holiday-hanukkah.webp') no-repeat center/cover fixed !important;
 }
 
 body.pesach{
   background:
-    radial-gradient(circle at 20% 20%, rgba(245,158,11,.15), transparent 40%),
-    linear-gradient(180deg,#1e293b,#0f172a) !important;
+    linear-gradient(115deg, rgba(20,28,22,.48), rgba(57,42,25,.32)),
+    url('holiday-pesach.webp') no-repeat center/cover fixed !important;
 }
 
 body.roshhashana{
   background:
-    radial-gradient(circle at 20% 20%, rgba(255,215,0,.15), transparent 40%),
-    linear-gradient(180deg,#7c2d12,#3f1d0f) !important;
+    linear-gradient(115deg, rgba(20,8,4,.76), rgba(10,31,21,.64)),
+    url('rosh-hashana-bg.webp') no-repeat center/cover fixed !important;
 }
 
 body.shavuot{
   background:
-    radial-gradient(circle at 30% 20%, rgba(255,255,255,.15), transparent 50%),
-    linear-gradient(180deg,#1e3a8a,#0f172a) !important;
+    linear-gradient(115deg, rgba(22,38,25,.48), rgba(48,38,22,.28)),
+    url('holiday-shavuot.webp') no-repeat center/cover fixed !important;
+}
+
+body.sukkot{
+  background:
+    linear-gradient(115deg, rgba(18,34,17,.52), rgba(50,32,13,.32)),
+    url('holiday-sukkot.webp') no-repeat center/cover fixed !important;
 }
 
 body.independence{
@@ -859,6 +864,31 @@ function getIsraelDateParts(now, calendar = "gregory") {
   );
 }
 
+// גיבוי מקומי ואוטומטי לחגים: פועל בכל שנה גם אם שירות לוח השנה אינו זמין.
+function getAnnualHolidayTheme(now = new Date()) {
+  const parts = getIsraelDateParts(now, "hebrew");
+  const month = String(parts.month).toLowerCase().replace(/\s+/g, " ").trim();
+  const day = Number(parts.day);
+
+  if (month.startsWith("tish") && day >= 1 && day <= 2) return { key: "rosh hashana" };
+  if (month.startsWith("tish") && day >= 15 && day <= 22) return { key: "sukkot" };
+  if ((month === "adar" || month.includes("adar ii")) && day === 14) return { key: "purim" };
+  if (month.startsWith("nisan") && day >= 15 && day <= 21) return { key: "pesach" };
+  if (month.startsWith("sivan") && day === 6) return { key: "shavuot" };
+
+  // חנוכה נמשך שמונה ימים החל מכ"ה בכסלו, גם בשנים שבהן כסלו קצר.
+  for (let daysAgo = 0; daysAgo < 8; daysAgo++) {
+    const candidate = new Date(now.getTime() - daysAgo * 24 * 60 * 60 * 1000);
+    const candidateParts = getIsraelDateParts(candidate, "hebrew");
+    const candidateMonth = String(candidateParts.month).toLowerCase();
+    if (candidateMonth.startsWith("kislev") && Number(candidateParts.day) === 25) {
+      return { key: "chanukah", candle: daysAgo + 1 };
+    }
+  }
+
+  return null;
+}
+
 function isYomKippurDisplayTime(now = new Date()) {
   const parts = getIsraelDateParts(now, "hebrew");
   const day = Number(parts.day);
@@ -1251,12 +1281,12 @@ const ThemeController = {
 
   // המילון שלנו: הגדרות לכל חג (טקסט לכותרת + תמונת רקע מתאימה)
   holidayData: {
-    "shavuot": { text: "חג שבועות שמח!", bg: "https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d?q=80&w=1920&auto=format&fit=crop" }, // תמונת שיבולי חיטה וטבע
+    "shavuot": { text: "חג שבועות שמח!", className: "shavuot", bg: "holiday-shavuot.webp" },
     "rosh hashana": { text: "שנה טובה ומתוקה!", className: "roshhashana", bg: "rosh-hashana-bg.webp" },
-    "sukkot": { text: "חג סוכות שמח!", bg: "https://images.unsplash.com/photo-1508688407886-07e0dfd65db4?q=80&w=1920&auto=format&fit=crop" }, // סכך וטבע
-    "chanukah": { text: "חג חנוכה שמח!", bg: "https://images.unsplash.com/photo-1606041011872-59659ceb7230?q=80&w=1920&auto=format&fit=crop" }, // חנוכיה ואור
-    "purim": { text: "חג פורים שמח!", bg: "https://images.unsplash.com/photo-1520697960359-86eb49d41935?q=80&w=1920&auto=format&fit=crop" }, // אווירה צבעונית
-    "pesach": { text: "חג פסח שמח וכשר!", bg: "https://images.unsplash.com/photo-1616885338144-88db09a3637e?q=80&w=1920&auto=format&fit=crop" } // שולחן חג/אביב
+    "sukkot": { text: "חג סוכות שמח!", className: "sukkot", bg: "holiday-sukkot.webp" },
+    "chanukah": { text: "חג חנוכה שמח!", className: "hanukkah", bg: "holiday-hanukkah.webp" },
+    "purim": { text: "חג פורים שמח!", className: "purim", bg: "holiday-purim.webp" },
+    "pesach": { text: "חג פסח שמח וכשר!", className: "pesach", bg: "holiday-pesach.webp" }
   },
 
   async init() {
@@ -1393,14 +1423,29 @@ const ThemeController = {
         // מחפש התאמה בין האירוע למילון החגים שלנו
         for (let holidayKey in this.holidayData) {
           if (title.includes(holidayKey)) {
-            activeHoliday = this.holidayData[holidayKey];
+            activeHoliday = { ...this.holidayData[holidayKey] };
+            if (holidayKey === "chanukah") {
+              const candleMatch = title.match(/chanukah:\s*(\d+)\s*candle/i);
+              if (candleMatch) activeHoliday.text = `חג חנוכה שמח! · נר ${candleMatch[1]} מתוך 8`;
+            }
             break;
           }
         }
         if (activeHoliday) break;
       }
     } catch (e) { 
-      console.log("שגיאה בחיפוש חג, נטען עיצוב רגיל"); 
+      console.log("שירות לוח השנה אינו זמין; משתמשים בלוח המקומי");
+    }
+
+    // גיבוי שנתי שאינו תלוי בחיבור לאתר חיצוני.
+    if (!activeHoliday) {
+      const annualHoliday = getAnnualHolidayTheme(now);
+      if (annualHoliday) {
+        activeHoliday = { ...this.holidayData[annualHoliday.key] };
+        if (annualHoliday.key === "chanukah") {
+          activeHoliday.text = `חג חנוכה שמח! · נר ${annualHoliday.candle} מתוך 8`;
+        }
+      }
     }
 
     // 2. מחילים את העיצוב (חג / שבת / יום חול)
